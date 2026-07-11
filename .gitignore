@@ -1,0 +1,21 @@
+node_modules/
+.DS_Store
+
+# web (TanStack Start / Vite / Nitro)
+apps/web/dist/
+apps/web/.output/
+apps/web/.nitro/
+apps/web/.tanstack/
+
+# mobile (Expo)
+apps/mobile/.expo/
+apps/mobile/ios/
+apps/mobile/android/
+
+# env
+.env
+.env.*
+!.env.example
+
+# local claude settings (개인 설정은 커밋하지 않음)
+.claude/settings.local.json
