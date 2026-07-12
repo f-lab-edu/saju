@@ -15,9 +15,7 @@
       "Bash(git commit:*)",
       "Bash(git switch:*)"
     ],
-    "deny": [
-      "Read(./**/.env*)"
-    ]
+    "deny": ["Read(./**/.env*)"]
   },
   "hooks": {
     "UserPromptSubmit": [

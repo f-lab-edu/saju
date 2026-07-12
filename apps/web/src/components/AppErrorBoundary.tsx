@@ -4,7 +4,10 @@ function ErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
   const message = error instanceof Error ? error.message : '알 수 없는 오류'
 
   return (
-    <div role="alert" className="flex min-h-screen flex-col items-center justify-center gap-4 p-8">
+    <div
+      role="alert"
+      className="flex min-h-screen flex-col items-center justify-center gap-4 p-8"
+    >
       <h1 className="text-xl font-semibold">문제가 발생했습니다</h1>
       <p className="text-sm text-gray-500">{message}</p>
       <button
@@ -19,5 +22,7 @@ function ErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
 }
 
 export function AppErrorBoundary({ children }: { children: React.ReactNode }) {
-  return <ErrorBoundary FallbackComponent={ErrorFallback}>{children}</ErrorBoundary>
+  return (
+    <ErrorBoundary FallbackComponent={ErrorFallback}>{children}</ErrorBoundary>
+  )
 }

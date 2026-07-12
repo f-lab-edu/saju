@@ -1,0 +1,7 @@
+# 자동 생성/잠금 파일
+pnpm-lock.yaml
+apps/web/src/routeTree.gen.ts
+
+# 외부 유래 skill 문서 — 원문 diff 유지를 위해 포맷하지 않음
+apps/web/.claude/skills/react-best-practices/
+apps/web/.claude/skills/toss-frontend-fundamentals/

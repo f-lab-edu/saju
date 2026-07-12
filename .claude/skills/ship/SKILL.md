@@ -11,12 +11,12 @@ description: 변경사항을 검증 → 커밋 → (필요시 브랜치 생성) 
 
 변경 파일을 파악하고(`git status --porcelain`), 변경된 워크스페이스만 검사한다:
 
-| 변경 위치 | 실행할 검사 |
-|---|---|
-| `apps/web/` | `pnpm --filter web exec tsc --noEmit` → `pnpm --filter web exec vitest run` |
-| `apps/mobile/` | `cd apps/mobile && pnpm exec tsc --noEmit` |
-| `packages/` | 해당 패키지의 tsc + 테스트 |
-| 루트 설정만 | 검사 생략 가능 (`.claude/`, `*.md`, 설정 파일) |
+| 변경 위치      | 실행할 검사                                                                                            |
+| -------------- | ------------------------------------------------------------------------------------------------------ |
+| `apps/web/`    | `pnpm --filter web exec tsc --noEmit` → `pnpm --filter web lint` → `pnpm --filter web exec vitest run` |
+| `apps/mobile/` | `cd apps/mobile && pnpm exec tsc --noEmit`                                                             |
+| `packages/`    | 해당 패키지의 tsc + 테스트                                                                             |
+| 루트 설정만    | 검사 생략 가능 (`.claude/`, `*.md`, 설정 파일)                                                         |
 
 실패하면 **커밋하지 말고** 오류를 사용자에게 보고한다. 수정 요청을 받으면 고친 뒤 1단계부터 다시.
 
@@ -41,6 +41,7 @@ description: 변경사항을 검증 → 커밋 → (필요시 브랜치 생성) 
 리모트 유무로 분기한다 (`git remote -v`):
 
 **리모트 없음 (현재 상태)** — 로컬 머지:
+
 ```bash
 git switch main
 git merge --no-ff <작업브랜치> -m "merge: <작업브랜치>"
@@ -48,10 +49,12 @@ git branch -d <작업브랜치>
 ```
 
 **리모트 있음** — push 후 PR:
+
 ```bash
 git push -u origin <작업브랜치>
 gh pr create --title "<커밋 제목과 동일>" --body "<요약 + 검증 결과>"
 ```
+
 - PR 본문에는: 변경 요약, 1단계 검증 결과(통과한 검사 목록), 테스트 방법.
 - GitLab 리모트면 `gh` 대신 `glab mr create`.
 

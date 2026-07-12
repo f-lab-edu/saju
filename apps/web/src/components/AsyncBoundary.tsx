@@ -1,9 +1,9 @@
-import { QueryErrorResetBoundary } from "@tanstack/react-query";
-import { Suspense } from "react";
-import { ErrorBoundary, type FallbackProps } from "react-error-boundary";
+import { QueryErrorResetBoundary } from '@tanstack/react-query'
+import { Suspense } from 'react'
+import { ErrorBoundary, type FallbackProps } from 'react-error-boundary'
 
 function DefaultErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
-  const message = error instanceof Error ? error.message : "알 수 없는 오류";
+  const message = error instanceof Error ? error.message : '알 수 없는 오류'
 
   return (
     <div
@@ -19,7 +19,7 @@ function DefaultErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
         다시 시도
       </button>
     </div>
-  );
+  )
 }
 
 function DefaultPendingFallback() {
@@ -31,15 +31,15 @@ function DefaultPendingFallback() {
     >
       <div className="size-6 animate-spin rounded-full border-2 border-gray-300 border-t-gray-900" />
     </div>
-  );
+  )
 }
 
 interface AsyncBoundaryProps {
-  children: React.ReactNode;
+  children: React.ReactNode
   /** Suspense 대기 중 보여줄 UI. 기본값은 스피너. */
-  pendingFallback?: React.ReactNode;
+  pendingFallback?: React.ReactNode
   /** 에러 시 보여줄 컴포넌트. 기본값은 재시도 버튼이 있는 인라인 안내. */
-  errorFallback?: React.ComponentType<FallbackProps>;
+  errorFallback?: React.ComponentType<FallbackProps>
 }
 
 /**
@@ -65,5 +65,5 @@ export function AsyncBoundary({
         </ErrorBoundary>
       )}
     </QueryErrorResetBoundary>
-  );
+  )
 }

@@ -5,7 +5,8 @@
   "scripts": {
     "dev:web": "pnpm --filter web dev",
     "dev:mobile": "pnpm --filter mobile start",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "lint": "pnpm --filter web lint"
   },
   "devDependencies": {
     "prettier": "^3.5.0"
