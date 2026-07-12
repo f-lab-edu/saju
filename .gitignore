@@ -19,3 +19,4 @@ apps/mobile/android/
 
 # local claude settings (개인 설정은 커밋하지 않음)
 .claude/settings.local.json
+.claude/scheduled_tasks.lock
