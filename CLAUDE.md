@@ -17,7 +17,8 @@ pnpm workspace 모노레포:
 - `pnpm dev:web` — 웹 개발 서버 (http://localhost:3000)
 - `pnpm dev:mobile` — Expo 개발 서버 (웹 서버가 먼저 떠 있어야 WebView에 내용이 보임)
 - `pnpm --filter web test` — 웹 테스트 (vitest)
-- `pnpm format` — prettier 전체 포맷
+- `pnpm lint` — 웹 ESLint (react-hooks + React Compiler 규칙 + TanStack Query 플러그인)
+- `pnpm format` — prettier 전체 포맷 (스타일은 루트 `.prettierrc`: semi 없음, 작은따옴표)
 
 ## 아키텍처 규칙
 
@@ -54,8 +55,9 @@ pnpm workspace 모노레포:
 루트 (공통):
 
 - `.claude/settings.json` — hooks 등록 + 권한 설정 (웹 전용 hook도 여기 등록, 스크립트가 `apps/web` 경로만 검사)
-- `.claude/hooks/` — 자동 포맷, .env 보호, 완료 알림, 수동 메모 경고, useQuery 경고, 서브에이전트 라우팅 힌트(UserPromptSubmit), 커밋 전 검증 강제(pre-commit-check — 실패 시 git commit 차단)
+- `.claude/hooks/` — 자동 포맷+lint(format-file — prettier 후 apps/web 파일은 eslint --fix, 남은 오류는 Claude에 피드백), .env 보호, 완료 알림, 수동 메모 경고, useQuery 경고, 서브에이전트 라우팅 힌트(UserPromptSubmit), 커밋 전 검증 강제(pre-commit-check — tsc/lint/테스트 실패 시 git commit 차단)
 - `.claude/agents/` — saju-master(사주 도메인 전문가), debugger(진단 전용 디버깅 — 수정 금지)
+- `.claude/rules/` — 항상 로드되는 규칙 파일(`.md`만 인식, `.mdx` 불가). performance.md(모델 선택·컨텍스트 관리). frontmatter `paths:` glob을 주면 해당 파일을 읽을 때만 조건부 로드
 - `.claude/skills/` — dev-servers(두 앱 실행), saju-calc(공유 도메인 규칙), ship(/ship — 검증→커밋→브랜치→머지/PR 워크플로)
 - `.mcp.json` — MCP 서버 (context7 문서 조회, playwright 브라우저)
 
@@ -63,6 +65,7 @@ apps/web (웹 전용):
 
 - `apps/web/.claude/agents/frontend-reviewer.md` — TanStack Start 코드 리뷰어
 - `apps/web/.claude/skills/` — web-stack(React 19/Query/zustand/RHF 컨벤션), web-testing(Vitest+RTL), toss-frontend-fundamentals(코드 품질 4기준 + 17개 규칙), react-best-practices(Vercel 성능 62규칙, 부적합 8개 제거됨). 외부 유래 skill은 SKILL.md 상단 "프로젝트 적용 노트"가 규칙 원문보다 우선.
+  - 규칙이 skill별 `rules/` 아래 개별 파일로 쪼개진 것은 의도된 점진 로드 구조다(트리거 시 SKILL.md만, 개별 규칙은 필요할 때만 로드). 파일 수를 줄이려고 통합하거나 `.claude/rules/`(항상 로드)로 옮기지 말 것.
 
 apps/mobile:
 

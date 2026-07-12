@@ -43,6 +43,10 @@ if echo "$changed" | grep -q "^apps/web/"; then
     deny "[pre-commit-check] 커밋 차단 — apps/web 타입체크 실패. 오류를 고친 뒤 다시 커밋하세요:
 $(head -15 "$log")"
   fi
+  if ! pnpm --filter web lint >"$log" 2>&1; then
+    deny "[pre-commit-check] 커밋 차단 — apps/web lint 실패. 오류를 고친 뒤 다시 커밋하세요:
+$(grep -vE "^>|^$" "$log" | head -15)"
+  fi
   if ! pnpm --filter web exec vitest run >"$log" 2>&1; then
     deny "[pre-commit-check] 커밋 차단 — apps/web 테스트 실패. 실패한 테스트를 고친 뒤 다시 커밋하세요:
 $(grep -E "FAIL|✕|Tests" "$log" | head -10)"

@@ -19,12 +19,12 @@ React Compiler가 켜져 있다 (`vite.config.ts`, `vitest.config.ts`의 `babel-
 
 ## 상태 관리 — 종류별로 도구가 다르다
 
-| 상태 종류 | 도구 | 예 |
-|---|---|---|
-| 서버 상태 (API 데이터) | TanStack Query | 사주 풀이 결과, 사용자 프로필 |
-| 전역 클라이언트 상태 | zustand | 테마, 입력 중인 생년월일시 |
-| 폼 상태 | react-hook-form | 생년월일 입력 폼 |
-| URL 상태 | TanStack Router search params | 탭, 필터, 공유 가능한 화면 상태 |
+| 상태 종류              | 도구                          | 예                              |
+| ---------------------- | ----------------------------- | ------------------------------- |
+| 서버 상태 (API 데이터) | TanStack Query                | 사주 풀이 결과, 사용자 프로필   |
+| 전역 클라이언트 상태   | zustand                       | 테마, 입력 중인 생년월일시      |
+| 폼 상태                | react-hook-form               | 생년월일 입력 폼                |
+| URL 상태               | TanStack Router search params | 탭, 필터, 공유 가능한 화면 상태 |
 
 서버 데이터를 zustand에 복사하지 않는다. 폼 값을 zustand에 실시간 동기화하지 않는다(제출 시점에만).
 
@@ -35,7 +35,7 @@ React Compiler가 켜져 있다 (`vite.config.ts`, `vitest.config.ts`의 `babel-
 
 ```tsx
 <AsyncBoundary>
-  <FortuneResult birth={birth} />   {/* 내부에서 useSuspenseQuery */}
+  <FortuneResult birth={birth} /> {/* 내부에서 useSuspenseQuery */}
 </AsyncBoundary>
 ```
 
