@@ -2,6 +2,7 @@
 import type {
   EarthlyBranch,
   HeavenlyStem,
+  JiJangGanRole,
   Ohaeng,
   SipSeongOrSelf,
   UnSeong,
@@ -96,4 +97,72 @@ export const UNSEONG_HANJA_TO_HANGUL: Record<string, UnSeong> = {
   绝: '절',
   胎: '태',
   养: '양',
+}
+
+export interface JiJangGanEntry {
+  gan: HeavenlyStem
+  role: JiJangGanRole
+}
+
+// 지장간 표준(월률분야). 신강신약 세력 계산 전용.
+// 엔진의 hideGan 배열 순서(중기/여기가 유동적)에 의존하지 않으려고 별도로 고정한다.
+// 각 지지의 정기 오행은 BRANCH_OHAENG와 일치한다.
+export const BRANCH_JIJANGGAN: Record<EarthlyBranch, JiJangGanEntry[]> = {
+  자: [
+    { gan: '임', role: '여기' },
+    { gan: '계', role: '정기' },
+  ],
+  축: [
+    { gan: '계', role: '여기' },
+    { gan: '신', role: '중기' },
+    { gan: '기', role: '정기' },
+  ],
+  인: [
+    { gan: '무', role: '여기' },
+    { gan: '병', role: '중기' },
+    { gan: '갑', role: '정기' },
+  ],
+  묘: [
+    { gan: '갑', role: '여기' },
+    { gan: '을', role: '정기' },
+  ],
+  진: [
+    { gan: '을', role: '여기' },
+    { gan: '계', role: '중기' },
+    { gan: '무', role: '정기' },
+  ],
+  사: [
+    { gan: '무', role: '여기' },
+    { gan: '경', role: '중기' },
+    { gan: '병', role: '정기' },
+  ],
+  오: [
+    { gan: '병', role: '여기' },
+    { gan: '기', role: '중기' },
+    { gan: '정', role: '정기' },
+  ],
+  미: [
+    { gan: '정', role: '여기' },
+    { gan: '을', role: '중기' },
+    { gan: '기', role: '정기' },
+  ],
+  신: [
+    { gan: '무', role: '여기' },
+    { gan: '임', role: '중기' },
+    { gan: '경', role: '정기' },
+  ],
+  유: [
+    { gan: '경', role: '여기' },
+    { gan: '신', role: '정기' },
+  ],
+  술: [
+    { gan: '신', role: '여기' },
+    { gan: '정', role: '중기' },
+    { gan: '무', role: '정기' },
+  ],
+  해: [
+    { gan: '무', role: '여기' },
+    { gan: '갑', role: '중기' },
+    { gan: '임', role: '정기' },
+  ],
 }

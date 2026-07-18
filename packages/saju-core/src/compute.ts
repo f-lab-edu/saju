@@ -1,5 +1,6 @@
 // 최상위 오케스트레이션: 입력 검증 → 태양시 보정 → 엔진 호출 → 도메인 변환.
 import { computeAnalysis } from './analysis'
+import { computeStrength } from './strength'
 import { toDaeUnList, toWolUnList } from './daeun'
 import { toEngineDaeUn, toEnginePillars, toEngineWolUn } from './engine'
 import { branchFromHanja } from './ganzhi'
@@ -89,6 +90,7 @@ export function computeSaju(
     hour,
     gongMang,
     analysis: computeAnalysis([year, month, day, hour]),
+    strength: computeStrength({ year, month, day, hour }),
     daeUn,
     input,
     options: resolved,
