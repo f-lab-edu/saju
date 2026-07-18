@@ -1,5 +1,9 @@
 import { computeSaju } from '@saju/core'
-import type { SajuInput, SajuResult as SajuResultType } from '@saju/core'
+import type {
+  SajuInput,
+  SajuOptions,
+  SajuResult as SajuResultType,
+} from '@saju/core'
 import { AnalysisPanel } from './AnalysisPanel'
 import { DaeUnTable } from './DaeUnTable'
 import { PillarCard } from './PillarCard'
@@ -9,6 +13,7 @@ import { StrengthPanel } from './StrengthPanel'
 
 interface SajuResultProps {
   input: SajuInput
+  options?: SajuOptions
 }
 
 // computeSaju는 렌더 중 호출되는 순수 동기 계산이라, 잘못된 입력으로 던지는 예외를
@@ -17,9 +22,9 @@ type ComputeState =
   | { ok: true; result: SajuResultType }
   | { ok: false; message: string }
 
-function safeCompute(input: SajuInput): ComputeState {
+function safeCompute(input: SajuInput, options?: SajuOptions): ComputeState {
   try {
-    return { ok: true, result: computeSaju(input) }
+    return { ok: true, result: computeSaju(input, options) }
   } catch (error) {
     const message =
       error instanceof Error ? error.message : '계산 중 오류가 발생했습니다.'
@@ -27,8 +32,8 @@ function safeCompute(input: SajuInput): ComputeState {
   }
 }
 
-export function SajuResult({ input }: SajuResultProps) {
-  const state = safeCompute(input)
+export function SajuResult({ input, options }: SajuResultProps) {
+  const state = safeCompute(input, options)
 
   if (!state.ok) {
     return (
@@ -46,7 +51,14 @@ export function SajuResult({ input }: SajuResultProps) {
         <PillarCard label="년주" pillar={result.year} />
         <PillarCard label="월주" pillar={result.month} />
         <PillarCard label="일주" pillar={result.day} />
-        <PillarCard label="시주" pillar={result.hour} />
+        {result.hour ? (
+          <PillarCard label="시주" pillar={result.hour} />
+        ) : (
+          <div className="flex flex-col items-center gap-1.5 text-center">
+            <span className="text-sm font-medium text-gray-500">시주</span>
+            <span className="mt-4 text-xs text-gray-400">시간 모름</span>
+          </div>
+        )}
       </div>
 
       <p className="text-xs text-gray-500">공망: {result.gongMang.join('·')}</p>
@@ -72,11 +84,11 @@ export function SajuResult({ input }: SajuResultProps) {
       )}
 
       <p className="text-xs text-gray-400">
-        자시 정책:{' '}
-        {result.options.ziPolicy === 'sameDay'
-          ? '야자시(당일)'
-          : '야자시(다음날)'}{' '}
-        · 태양시 보정 {result.options.longitudeCorrectionMinutes}분
+        자시 {result.options.ziPolicy === 'sameDay' ? '당일' : '다음날'} ·
+        태양시 보정 {result.options.longitudeCorrectionMinutes}분 · 표준자오선{' '}
+        {result.options.standardMeridian}°
+        {result.options.dstApplied && ' · 서머타임 -60분'}
+        {result.options.timeUnknown && ' · 시간 모름'}
       </p>
     </section>
   )

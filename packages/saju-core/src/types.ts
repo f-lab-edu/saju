@@ -110,9 +110,9 @@ export interface SajuInput {
   month: number
   /** 1~31 */
   day: number
-  /** 0~23 */
+  /** 0~23. timeUnknown이면 무시된다. */
   hour: number
-  /** 0~59 */
+  /** 0~59. timeUnknown이면 무시된다. */
   minute: number
   /** MVP에선 계산에 영향 없음(대운 방향 등 후속 기능에서 사용). 보관만 한다. */
   gender?: Gender
@@ -130,17 +130,33 @@ export interface SajuOptions {
   /** 기본 'sameDay' */
   ziPolicy?: ZiPolicy
   /**
-   * 태양시 경도 보정(분). 표준시 자오선과 실제 출생지 경도 차이를 시각에서 뺀다.
-   * 한국(서울 약 127.5°E, KST는 135°E 기준)은 약 -30분이 관례. 기본 -30.
-   * 0을 주면 보정하지 않는다.
+   * 출생지 동경 경도(예: 서울 126.98). 주면 그 날짜에 유효했던 표준 자오선
+   * (135도 또는 1954~1961·1908~1911의 127.5도) 대비 (경도-자오선)×4분으로 보정.
+   */
+  longitude?: number
+  /**
+   * longitude가 없을 때 쓰는 직접 경도 보정(분). 기본 -30. 0이면 보정 안 함.
    */
   longitudeCorrectionMinutes?: number
+  /** 서머타임 자동 보정 여부. 기본 true(시행 구간 출생만 -60분). */
+  applyDst?: boolean
+  /** 출생 시각을 모를 때 true. 시주를 계산하지 않고 년/월/일주만 낸다. */
+  timeUnknown?: boolean
 }
 
 /** 옵션 기본값이 채워진, 실제 적용된 설정. 결과에 담아 계산의 투명성을 남긴다. */
 export interface ResolvedOptions {
   ziPolicy: ZiPolicy
+  /** 실제 적용된 경도 보정(분, 서머타임 제외) */
   longitudeCorrectionMinutes: number
+  /** 입력받은 경도(있으면) */
+  longitude?: number
+  /** 서머타임 적용 여부 */
+  dstApplied: boolean
+  /** 적용된 표준 자오선(동경, 도) */
+  standardMeridian: number
+  /** 시간 모름 여부 */
+  timeUnknown: boolean
 }
 
 /** 간지 한 쌍과 오행. 대운/연운/월운 등 시간 흐름 항목의 기본 단위. */
@@ -338,8 +354,8 @@ export interface SajuResult {
   month: Pillar
   /** 일주(日柱) */
   day: Pillar
-  /** 시주(時柱) */
-  hour: Pillar
+  /** 시주(時柱). 시간 모름(timeUnknown)이면 null. */
+  hour: Pillar | null
   /** 공망(空亡): 일주 기준으로 비어 있는 두 지지 */
   gongMang: EarthlyBranch[]
   /** 8글자 기반 오행/십성/오성 분포 */

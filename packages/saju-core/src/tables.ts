@@ -269,7 +269,13 @@ export const BRANCH_TO_SAMHAP: Record<EarthlyBranch, SamhapGroup> = {
 /** 삼합 그룹 → 삼합 기반 신살의 판정 지지 */
 export const SAMHAP_SINSAL: Record<
   SamhapGroup,
-  { 도화: EarthlyBranch; 역마: EarthlyBranch; 화개: EarthlyBranch; 겁살: EarthlyBranch; 망신: EarthlyBranch }
+  {
+    도화: EarthlyBranch
+    역마: EarthlyBranch
+    화개: EarthlyBranch
+    겁살: EarthlyBranch
+    망신: EarthlyBranch
+  }
 > = {
   신자진: { 도화: '유', 역마: '인', 화개: '진', 겁살: '사', 망신: '해' },
   인오술: { 도화: '묘', 역마: '신', 화개: '술', 겁살: '해', 망신: '사' },

@@ -1,10 +1,10 @@
-import type { Gender, SajuInput } from '@saju/core'
+import type { Gender, SajuInput, SajuOptions, ZiPolicy } from '@saju/core'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import type { BirthFormValues } from '#/features/saju/BirthInputForm'
 import { BirthInputForm } from '#/features/saju/BirthInputForm'
 import { SajuResult } from '#/features/saju/SajuResult'
 
-// 공유 가능한 화면 상태(생년월일시)는 URL search params에 담는다.
+// 공유 가능한 화면 상태(생년월일시 + 옵션)는 URL search params에 담는다.
 interface SajuSearch {
   year?: number
   month?: number
@@ -12,6 +12,9 @@ interface SajuSearch {
   hour?: number
   minute?: number
   gender?: Gender
+  zi?: ZiPolicy
+  lon?: number
+  noTime?: boolean
 }
 
 function toNumber(value: unknown): number | undefined {
@@ -24,6 +27,8 @@ function validateSearch(search: Record<string, unknown>): SajuSearch {
     search.gender === 'male' || search.gender === 'female'
       ? search.gender
       : undefined
+  const zi =
+    search.zi === 'sameDay' || search.zi === 'nextDay' ? search.zi : undefined
   return {
     year: toNumber(search.year),
     month: toNumber(search.month),
@@ -31,6 +36,10 @@ function validateSearch(search: Record<string, unknown>): SajuSearch {
     hour: toNumber(search.hour),
     minute: toNumber(search.minute),
     gender,
+    zi,
+    lon: toNumber(search.lon),
+    noTime:
+      search.noTime === true || search.noTime === 'true' ? true : undefined,
   }
 }
 
@@ -39,25 +48,39 @@ export const Route = createFileRoute('/')({
   validateSearch,
 })
 
-// search에 생년월일시가 모두 있으면 SajuInput으로, 아니면 null.
-function toInput(search: SajuSearch): SajuInput | null {
-  const { year, month, day, hour, minute, gender } = search
-  if (
-    year === undefined ||
-    month === undefined ||
-    day === undefined ||
-    hour === undefined ||
-    minute === undefined
-  ) {
+// search로부터 계산에 필요한 입력과 옵션을 만든다. 필수값이 없으면 null.
+function toRequest(
+  search: SajuSearch,
+): { input: SajuInput; options: SajuOptions } | null {
+  const { year, month, day, hour, minute, gender, zi, lon, noTime } = search
+  if (year === undefined || month === undefined || day === undefined) {
     return null
   }
-  return { year, month, day, hour, minute, gender }
+  const timeUnknown = noTime ?? false
+  if (!timeUnknown && (hour === undefined || minute === undefined)) {
+    return null
+  }
+  return {
+    input: {
+      year,
+      month,
+      day,
+      hour: hour ?? 0,
+      minute: minute ?? 0,
+      gender,
+    },
+    options: {
+      ziPolicy: zi,
+      longitude: lon,
+      timeUnknown,
+    },
+  }
 }
 
 function Home() {
   const search = Route.useSearch()
   const navigate = useNavigate({ from: Route.fullPath })
-  const input = toInput(search)
+  const request = toRequest(search)
 
   function handleSubmit(values: BirthFormValues) {
     navigate({
@@ -65,9 +88,12 @@ function Home() {
         year: values.year,
         month: values.month,
         day: values.day,
-        hour: values.hour,
-        minute: values.minute,
+        hour: values.timeUnknown ? undefined : values.hour,
+        minute: values.timeUnknown ? undefined : values.minute,
         gender: values.gender === '' ? undefined : values.gender,
+        zi: values.ziPolicy,
+        lon: values.longitude === '' ? undefined : values.longitude,
+        noTime: values.timeUnknown ? true : undefined,
       },
     })
   }
@@ -81,9 +107,24 @@ function Home() {
         </p>
       </header>
 
-      <BirthInputForm defaultValues={search} onSubmit={handleSubmit} />
+      <BirthInputForm
+        defaultValues={{
+          year: search.year,
+          month: search.month,
+          day: search.day,
+          hour: search.hour,
+          minute: search.minute,
+          gender: search.gender,
+          ziPolicy: search.zi,
+          longitude: search.lon ?? '',
+          timeUnknown: search.noTime,
+        }}
+        onSubmit={handleSubmit}
+      />
 
-      {input && <SajuResult input={input} />}
+      {request && (
+        <SajuResult input={request.input} options={request.options} />
+      )}
     </main>
   )
 }

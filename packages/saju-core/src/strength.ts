@@ -55,7 +55,7 @@ function isSupport(dayOhaeng: Ohaeng, o: Ohaeng): boolean {
 
 /** 가중 오행 세력 합산. 일간 천간은 제외, 지지는 지장간으로만(이중 계산 방지). */
 function computeOhaengScores(
-  pillars: [Pillar, Pillar, Pillar, Pillar],
+  pillars: Pillar[],
   monthPillar: Pillar,
   dayPillar: Pillar,
 ): Record<Ohaeng, number> {
@@ -138,12 +138,14 @@ export function computeStrength(pillars: {
   year: Pillar
   month: Pillar
   day: Pillar
-  hour: Pillar
+  hour: Pillar | null
 }): SajuStrengthAnalysis {
   const { year, month, day, hour } = pillars
   const dayOhaeng = day.ganOhaeng
+  // 시간 모름이면 시주를 세력에서 뺀다.
+  const list = hour ? [year, month, day, hour] : [year, month, day]
 
-  const scores = computeOhaengScores([year, month, day, hour], month, day)
+  const scores = computeOhaengScores(list, month, day)
   const ohaengStrength = toOhaengStrength(scores)
 
   // 오행 세력 → 일간 기준 오성 세력
@@ -168,7 +170,8 @@ export function computeStrength(pillars: {
   const duk: DukPanjeong = {
     deukRyeong: isSupport(dayOhaeng, month.zhiOhaeng),
     deukJi: isSupport(dayOhaeng, day.zhiOhaeng),
-    deukSi: isSupport(dayOhaeng, hour.zhiOhaeng),
+    // 시간 모름이면 득시는 판정 불가 → false
+    deukSi: hour ? isSupport(dayOhaeng, hour.zhiOhaeng) : false,
     deukSe: supportRatio >= 50,
   }
 

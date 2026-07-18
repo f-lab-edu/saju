@@ -289,11 +289,13 @@ export function computeRelations(pillars: {
   year: Pillar
   month: Pillar
   day: Pillar
-  hour: Pillar
+  hour: Pillar | null
 }): Relation[] {
   const { year, month, day, hour } = pillars
+  // 시간 모름이면 시주 없이 3기둥만.
+  const list = hour ? [year, month, day, hour] : [year, month, day]
   return findRelations(
-    [year.gan, month.gan, day.gan, hour.gan],
-    [year.zhi, month.zhi, day.zhi, hour.zhi],
+    list.map((p) => p.gan),
+    list.map((p) => p.zhi),
   )
 }
