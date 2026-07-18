@@ -4,6 +4,7 @@ import { AnalysisPanel } from './AnalysisPanel'
 import { DaeUnTable } from './DaeUnTable'
 import { PillarCard } from './PillarCard'
 import { RelationsPanel } from './RelationsPanel'
+import { SinSalPanel } from './SinSalPanel'
 import { StrengthPanel } from './StrengthPanel'
 
 interface SajuResultProps {
@@ -53,6 +54,8 @@ export function SajuResult({ input }: SajuResultProps) {
       <StrengthPanel strength={result.strength} />
 
       <RelationsPanel relations={result.relations} />
+
+      <SinSalPanel sinSal={result.sinSal} />
 
       <AnalysisPanel analysis={result.analysis} />
 

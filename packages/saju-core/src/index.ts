@@ -3,6 +3,7 @@ export { computeSaju, computeWolUn } from './compute'
 export { computeAnalysis } from './analysis'
 export { computeStrength } from './strength'
 export { computeRelations, findRelations } from './interactions'
+export { computeSinSal } from './sinsal'
 export { ganziToOhaeng, stemToOhaeng, branchToOhaeng } from './ohaeng'
 export { dayPillarByJdn, gregorianToJdn } from './day-jdn'
 export { naEum } from './naeum'
@@ -32,6 +33,10 @@ export {
   type RelationType,
   type RelationMember,
   type Relation,
+  type SinSalCategory,
+  type SinSalBasis,
+  type SinSalHit,
+  type SinSal,
   type DaeUn,
   type YeonUn,
   type WolUn,

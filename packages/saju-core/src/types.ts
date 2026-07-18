@@ -297,6 +297,25 @@ export interface Relation {
   label?: string
 }
 
+export type SinSalCategory = '길성' | '흉살' | '중립'
+
+export type SinSalBasis = '일간' | '삼합(년지)' | '삼합(일지)' | '자형'
+
+/** 신살이 붙은 한 지점 */
+export interface SinSalHit {
+  pillar: PillarKey
+  position: 'stem' | 'branch'
+  char: string
+}
+
+/** 신살·길성 하나 */
+export interface SinSal {
+  name: string
+  category: SinSalCategory
+  basis: SinSalBasis
+  hits: SinSalHit[]
+}
+
 export interface SajuResult {
   /** 년주(年柱) - 입춘 기준 */
   year: Pillar
@@ -314,6 +333,8 @@ export interface SajuResult {
   strength: SajuStrengthAnalysis
   /** 8글자에서 발견된 합충형파해 관계 */
   relations: Relation[]
+  /** 신살·길성 */
+  sinSal: SinSal[]
   /**
    * 대운 목록. 방향(순행/역행)이 성별에 따라 갈리므로 gender가 있을 때만 채운다.
    * gender가 없으면 undefined.

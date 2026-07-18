@@ -166,3 +166,117 @@ export const BRANCH_JIJANGGAN: Record<EarthlyBranch, JiJangGanEntry[]> = {
     { gan: '임', role: '정기' },
   ],
 }
+
+// ─── 신살·길성 룩업 테이블 (saju-master 검증본) ───
+
+/** 천을귀인(天乙貴人): 일간 → 지지 2개 */
+export const CHEONEUL_GWIIN: Record<HeavenlyStem, EarthlyBranch[]> = {
+  갑: ['축', '미'],
+  무: ['축', '미'],
+  경: ['축', '미'],
+  을: ['자', '신'],
+  기: ['자', '신'],
+  병: ['해', '유'],
+  정: ['해', '유'],
+  신: ['인', '오'],
+  임: ['묘', '사'],
+  계: ['묘', '사'],
+}
+
+/** 문창귀인(文昌貴人): 일간 → 지지 1개 */
+export const MUNCHANG_GWIIN: Record<HeavenlyStem, EarthlyBranch> = {
+  갑: '사',
+  을: '오',
+  병: '신',
+  정: '유',
+  무: '신',
+  기: '유',
+  경: '해',
+  신: '자',
+  임: '인',
+  계: '묘',
+}
+
+/** 정록/건록(正祿/建祿): 일간의 건록지 */
+export const JEONGNOK: Record<HeavenlyStem, EarthlyBranch> = {
+  갑: '인',
+  을: '묘',
+  병: '사',
+  정: '오',
+  무: '사',
+  기: '오',
+  경: '신',
+  신: '유',
+  임: '해',
+  계: '자',
+}
+
+/** 양인(羊刃): 양간의 제왕지. 음간은 유파차가 커 미포함. */
+export const YANGIN: Partial<Record<HeavenlyStem, EarthlyBranch>> = {
+  갑: '묘',
+  병: '오',
+  무: '오',
+  경: '유',
+  임: '자',
+}
+
+/** 학당귀인(學堂貴人): 일간의 장생지 */
+export const HAKDANG_GWIIN: Record<HeavenlyStem, EarthlyBranch> = {
+  갑: '해',
+  을: '오',
+  병: '인',
+  정: '유',
+  무: '인',
+  기: '유',
+  경: '사',
+  신: '자',
+  임: '신',
+  계: '묘',
+}
+
+/** 관귀학관(官貴學官): 일간 정관 오행의 장생지 */
+export const GWANGWI_HAKGWAN: Record<HeavenlyStem, EarthlyBranch> = {
+  갑: '사',
+  을: '사',
+  병: '신',
+  정: '신',
+  무: '해',
+  기: '해',
+  경: '인',
+  신: '인',
+  임: '인',
+  계: '인',
+}
+
+export type SamhapGroup = '신자진' | '인오술' | '사유축' | '해묘미'
+
+/** 지지 → 속한 삼합 그룹 */
+export const BRANCH_TO_SAMHAP: Record<EarthlyBranch, SamhapGroup> = {
+  신: '신자진',
+  자: '신자진',
+  진: '신자진',
+  인: '인오술',
+  오: '인오술',
+  술: '인오술',
+  사: '사유축',
+  유: '사유축',
+  축: '사유축',
+  해: '해묘미',
+  묘: '해묘미',
+  미: '해묘미',
+}
+
+/** 삼합 그룹 → 삼합 기반 신살의 판정 지지 */
+export const SAMHAP_SINSAL: Record<
+  SamhapGroup,
+  { 도화: EarthlyBranch; 역마: EarthlyBranch; 화개: EarthlyBranch; 겁살: EarthlyBranch; 망신: EarthlyBranch }
+> = {
+  신자진: { 도화: '유', 역마: '인', 화개: '진', 겁살: '사', 망신: '해' },
+  인오술: { 도화: '묘', 역마: '신', 화개: '술', 겁살: '해', 망신: '사' },
+  사유축: { 도화: '오', 역마: '해', 화개: '축', 겁살: '인', 망신: '신' },
+  해묘미: { 도화: '자', 역마: '사', 화개: '미', 겁살: '신', 망신: '인' },
+}
+
+/** 현침살(懸針殺): 천간·지지 자형 스캔 대상 */
+export const HYEONCHIM_STEM: HeavenlyStem[] = ['갑', '신']
+export const HYEONCHIM_BRANCH: EarthlyBranch[] = ['묘', '오', '미', '신']
