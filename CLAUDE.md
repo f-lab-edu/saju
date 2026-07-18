@@ -56,7 +56,7 @@ pnpm workspace 모노레포:
 루트 (공통):
 
 - `.claude/settings.json`: hooks 등록 + 권한 설정 (웹 전용 hook도 여기 등록, 스크립트가 `apps/web` 경로만 검사)
-- `.claude/hooks/`: 자동 포맷+lint(format-file: oxfmt 후 apps/web 파일은 oxlint --fix, 남은 오류는 Claude에 피드백), .env 보호, 완료 알림, 수동 메모 경고, useQuery 경고, 서브에이전트 라우팅 힌트(UserPromptSubmit), 커밋 전 검증 강제(pre-commit-check: tsgo/lint/테스트 실패 시 git commit 차단)
+- `.claude/hooks/`: 자동 포맷+lint(format-file: oxfmt 후 apps/web 파일은 oxlint --fix, 남은 오류는 Claude에 피드백), .env 보호, 완료 알림, 수동 메모 경고, useQuery 경고, 서브에이전트 라우팅 힌트(UserPromptSubmit), 커밋 전 검증 강제(pre-commit-check: tsgo/lint/테스트 실패 시 git commit 차단), routeTree.gen.ts 편집 차단(protect-routetree), react/react-dom 버전 드리프트 경고(check-react-version: web·mobile package.json 편집 시 버전 불일치 감지)
 - `.claude/agents/`: saju-master(사주 도메인 전문가), debugger(진단 전용 디버깅, 수정 금지)
 - `.claude/rules/`: 항상 로드되는 규칙 파일(`.md`만 인식, `.mdx` 불가). performance.md(모델 선택·컨텍스트 관리), markdown-style.md(md 작성 시 em-dash 금지·강조 최소화). frontmatter `paths:` glob을 주면 해당 파일을 읽을 때만 조건부 로드
 - `.claude/skills/`: dev-servers(두 앱 실행), saju-calc(공유 도메인 규칙), ship(/ship: 검증→커밋→브랜치→머지/PR 워크플로)
