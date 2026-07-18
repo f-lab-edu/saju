@@ -263,6 +263,40 @@ export interface SajuStrengthAnalysis {
   yongSin: EokBuYongSin
 }
 
+/** 기둥 위치 */
+export type PillarKey = 'year' | 'month' | 'day' | 'hour'
+
+/** 합충형파해 관계 종류 */
+export type RelationType =
+  | 'stemCombine' // 천간합
+  | 'stemClash' // 천간충
+  | 'branchCombine' // 지지 육합
+  | 'branchTriple' // 삼합(반합 포함)
+  | 'branchDirection' // 방합
+  | 'branchClash' // 육충
+  | 'branchPunish' // 형
+  | 'branchBreak' // 파
+  | 'branchHarm' // 해
+  | 'branchResent' // 원진
+
+export interface RelationMember {
+  pillar: PillarKey
+  position: 'stem' | 'branch'
+  char: string
+}
+
+/** 8글자에서 발견된 관계 하나 */
+export interface Relation {
+  type: RelationType
+  members: RelationMember[]
+  /** 합류(합·삼합·방합)일 때 화(化)하는 오행 */
+  transformsTo?: Ohaeng
+  /** 삼합의 반합 등 부분 성립 */
+  partial?: boolean
+  /** 형의 세부 명칭(무은지형 등) */
+  label?: string
+}
+
 export interface SajuResult {
   /** 년주(年柱) - 입춘 기준 */
   year: Pillar
@@ -278,6 +312,8 @@ export interface SajuResult {
   analysis: SajuAnalysis
   /** 가중 세력 기반 신강신약·용신 분석 */
   strength: SajuStrengthAnalysis
+  /** 8글자에서 발견된 합충형파해 관계 */
+  relations: Relation[]
   /**
    * 대운 목록. 방향(순행/역행)이 성별에 따라 갈리므로 gender가 있을 때만 채운다.
    * gender가 없으면 undefined.

@@ -2,6 +2,7 @@
 export { computeSaju, computeWolUn } from './compute'
 export { computeAnalysis } from './analysis'
 export { computeStrength } from './strength'
+export { computeRelations, findRelations } from './interactions'
 export { ganziToOhaeng, stemToOhaeng, branchToOhaeng } from './ohaeng'
 export { dayPillarByJdn, gregorianToJdn } from './day-jdn'
 export { naEum } from './naeum'
@@ -27,6 +28,10 @@ export {
   type EokBuYongSin,
   type SinGangYak,
   type SajuStrengthAnalysis,
+  type PillarKey,
+  type RelationType,
+  type RelationMember,
+  type Relation,
   type DaeUn,
   type YeonUn,
   type WolUn,

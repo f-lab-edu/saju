@@ -3,6 +3,7 @@ import type { SajuInput, SajuResult as SajuResultType } from '@saju/core'
 import { AnalysisPanel } from './AnalysisPanel'
 import { DaeUnTable } from './DaeUnTable'
 import { PillarCard } from './PillarCard'
+import { RelationsPanel } from './RelationsPanel'
 import { StrengthPanel } from './StrengthPanel'
 
 interface SajuResultProps {
@@ -50,6 +51,8 @@ export function SajuResult({ input }: SajuResultProps) {
       <p className="text-xs text-gray-500">공망: {result.gongMang.join('·')}</p>
 
       <StrengthPanel strength={result.strength} />
+
+      <RelationsPanel relations={result.relations} />
 
       <AnalysisPanel analysis={result.analysis} />
 
