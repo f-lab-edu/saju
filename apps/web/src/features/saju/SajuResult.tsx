@@ -51,7 +51,11 @@ export function SajuResult({ input }: SajuResultProps) {
 
       <p className="text-xs text-gray-500">공망: {result.gongMang.join('·')}</p>
 
-      <StrengthPanel strength={result.strength} />
+      <StrengthPanel
+        strength={result.strength}
+        johu={result.johu}
+        yongSinRelation={result.yongSinRelation}
+      />
 
       <RelationsPanel relations={result.relations} />
 
