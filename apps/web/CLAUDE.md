@@ -1,11 +1,6 @@
----
-name: web-stack
-description: apps/web에서 React 컴포넌트·라우트·상태관리·폼 코드를 작성하거나 수정할 때 사용. React 19 + React Compiler + TanStack Query + zustand + react-hook-form + Tailwind 컨벤션.
----
-
 # apps/web 스택 컨벤션
 
-apps/web 코드를 작성하기 전에 이 규칙을 따를 것.
+apps/web 코드를 작성하기 전에 이 규칙을 따를 것. (React 19 + React Compiler + TanStack Query + zustand + react-hook-form + Tailwind)
 
 ## React 19 + React Compiler (가장 중요)
 
@@ -76,3 +71,8 @@ export const fortuneQuery = (birth: string) =>
 
 - CSS 설정은 `src/styles.css`의 `@theme`/`@import "tailwindcss"` 방식 (v4, tailwind.config.js 없음).
 - 클래스가 5개 이상 반복되면 컴포넌트로 추출한다. `@apply` 남용 금지.
+
+## 테스트 / 코드 품질 참고
+
+- 테스트 작성은 `web-testing` skill 참조 (Vitest + RTL 컨벤션).
+- 코드 품질/성능 리뷰는 `toss-frontend-fundamentals`, `react-best-practices` skill 참조.

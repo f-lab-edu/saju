@@ -20,7 +20,7 @@ esac
 matches=$(grep -nE '(^|[^[:alnum:]_])useQuery\(' "$file_path" | head -5)
 
 if [ -n "$matches" ]; then
-  echo "[check-suspense-query] apps/web의 데이터 조회 기본 패턴은 useSuspenseQuery + AsyncBoundary입니다 (web-stack skill 참조). 아래 useQuery 사용처를 확인하세요. 폴링·조건부 조회(enabled)처럼 정당한 예외라면 유지하되 이유를 주석으로 남기세요:" >&2
+  echo "[check-suspense-query] apps/web의 데이터 조회 기본 패턴은 useSuspenseQuery + AsyncBoundary입니다 (apps/web/CLAUDE.md 참조). 아래 useQuery 사용처를 확인하세요. 폴링·조건부 조회(enabled)처럼 정당한 예외라면 유지하되 이유를 주석으로 남기세요:" >&2
   echo "$matches" >&2
   exit 2
 fi
