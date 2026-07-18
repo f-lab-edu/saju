@@ -60,7 +60,7 @@ pnpm workspace 모노레포:
 - `.claude/agents/`: saju-master(사주 도메인 전문가), debugger(진단 전용 디버깅, 수정 금지)
 - `.claude/rules/`: 항상 로드되는 규칙 파일(`.md`만 인식, `.mdx` 불가). performance.md(모델 선택·컨텍스트 관리), markdown-style.md(md 작성 시 em-dash 금지·강조 최소화). frontmatter `paths:` glob을 주면 해당 파일을 읽을 때만 조건부 로드
 - `.claude/skills/`: dev-servers(두 앱 실행), saju-calc(공유 도메인 규칙), ship(/ship: 검증→커밋→브랜치→머지/PR 워크플로)
-- `.mcp.json`: MCP 서버 (context7 문서 조회, playwright 브라우저)
+- `.mcp.json`: MCP 서버 (context7 문서 조회, playwright 브라우저, github 원격 MCP로 PR·이슈·리뷰). github는 HTTP 원격 서버라 최초 1회 `/mcp`에서 OAuth 인증 필요
 
 apps/web (웹 전용):
 
