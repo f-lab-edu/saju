@@ -11,6 +11,7 @@ GitHub MCP 서버를 통해 Pull Request를 생성한다.
 ## 워크플로우
 
 ### 1. 컨텍스트 파악
+
 - 현재 브랜치: `git branch --show-current`
 - 베이스 브랜치 결정: 원격 기본 브랜치를 확인한다.
   `git remote show origin` 또는 `git symbolic-ref refs/remotes/origin/HEAD`.
@@ -22,11 +23,13 @@ GitHub MCP 서버를 통해 Pull Request를 생성한다.
 - owner/repo 확인: `git remote get-url origin`에서 파싱.
 
 ### 2. 제목 작성
+
 - Conventional Commits 스타일: `<type>(<scope>): <요약>`.
 - 요약은 **한국어**로 간결하게, 72자 이내, 마침표 없음.
 - 커밋이 하나면 그 커밋 제목을 활용, 여러 개면 전체를 아우르는 제목.
 
 ### 3. 본문 작성 (한국어)
+
 - **요약(Summary)은 항상 넣는다**: 이 PR이 무엇을·왜 하는지 한두 문단.
 - 그다음은 **diff를 읽고 필요한 섹션만 판단해서 추가**한다.
   변경 성격에 맞는 것만 넣고, 해당 없으면 생략한다:
@@ -42,6 +45,7 @@ GitHub MCP 서버를 통해 Pull Request를 생성한다.
 - "이 PR은 ~한다", "나는/우리는" 같은 군더더기 표현은 쓰지 않는다.
 
 ### 4. PR 생성 (GitHub MCP)
+
 - GitHub MCP 서버(`https://api.githubcopilot.com/mcp/`)의 `create_pull_request`
   도구를 사용한다. 스키마가 로드 안 돼 있으면 ToolSearch로 먼저 불러온다:
   `select:` 로 `create_pull_request`(및 필요 시 `get_pull_request`,
@@ -49,11 +53,29 @@ GitHub MCP 서버를 통해 Pull Request를 생성한다.
 - 인자: `owner`, `repo`, `base`, `head`(현재 브랜치), `title`, `body`.
   드래프트로 만들라고 하면 `draft: true`.
 - 생성 후 반환된 **PR 번호와 URL**을 사용자에게 알려준다.
-- GitHub MCP 서버가 연결/인증 안 돼 있으면: PR을 만들지 말고, 제목과
-  본문을 코드블록으로 출력해 사용자가 직접 붙여넣게 한다. 그리고 서버
-  연결이 필요하다고 알린다.
+
+#### MCP가 실패하면 `gh` CLI로 폴백
+
+MCP 서버가 연결/인증 안 됐거나, `create_pull_request`가 에러(403 권한
+부족 등)를 내면 아래 순서로 폴백한다:
+
+1. `gh` 사용 가능·인증 확인: `gh auth status`. (Homebrew 설치본은
+   `/opt/homebrew/bin`이라 PATH에 없으면 `export PATH="/opt/homebrew/bin:$PATH"`.)
+2. 로그인돼 있으면 `gh`로 생성한다. 본문은 셸 이스케이프를 피하려고
+   임시 파일에 쓰고 `--body-file`로 넘긴다:
+   ```bash
+   gh pr create --repo <owner>/<repo> --base <base> --head <branch> \
+     --title "<제목>" --body-file <임시본문파일>
+   ```
+   드래프트면 `--draft`. 생성 후 출력된 PR URL을 사용자에게 알린다.
+3. `gh`가 없으면 설치 안내(`brew install gh`), 로그인 안 돼 있으면
+   `gh auth login`(브라우저 OAuth, PAT 불필요) 안내. 대상 저장소에
+   **write 권한이 있는 계정**으로 로그인해야 한다고 덧붙인다.
+4. `gh`도 못 쓰는 상황이면 최후로 제목·본문을 코드블록으로 출력해
+   사용자가 웹 compare 화면에 직접 붙여넣게 한다.
 
 ## 규칙
+
 - 베이스 브랜치가 확실치 않으면 임의로 정하지 말고 확인한다.
 - main/master로 force push 하지 않는다. `--force`, hard reset 등 파괴적
   명령은 명시적 요청 없이 쓰지 않는다.
@@ -62,6 +84,7 @@ GitHub MCP 서버를 통해 Pull Request를 생성한다.
 - 이미 같은 브랜치로 열린 PR이 있으면, 새로 만들지 말고 알려준다.
 
 ## 모드
+
 - 기본은 간결. "자세히" 또는 "verbose"라고 하면 본문 맥락을 더 풍부하게.
 - "PR 만들지 말고 본문만"이라고 하면 4단계를 건너뛰고 제목·본문만 출력.
 
