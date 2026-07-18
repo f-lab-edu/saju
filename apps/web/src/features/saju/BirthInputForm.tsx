@@ -56,6 +56,8 @@ function NumberField({
         inputMode="numeric"
         placeholder={placeholder}
         disabled={disabled}
+        aria-invalid={errors[name] ? true : undefined}
+        aria-describedby={errors[name] ? `${name}-error` : undefined}
         className="rounded-lg border border-gray-300 px-3 py-2 focus:border-gray-900 focus:outline-none disabled:bg-gray-100 disabled:text-gray-400"
         {...register(name, {
           required: disabled ? false : `${label}을(를) 입력하세요`,
@@ -65,7 +67,7 @@ function NumberField({
         })}
       />
       {errors[name] && (
-        <p role="alert" className="text-xs text-red-600">
+        <p id={`${name}-error`} role="alert" className="text-xs text-red-600">
           {errors[name]?.message}
         </p>
       )}
@@ -82,13 +84,17 @@ export function BirthInputForm({
     handleSubmit,
     formState: { errors },
   } = useForm<BirthFormValues>({
+    // 필드별 nullish 병합. defaultValues를 통째로 스프레드하면 undefined 값이
+    // 폴백(hour:12 등)을 덮어써서 신규 진입 시 빈칸이 된다.
     defaultValues: {
-      hour: 12,
-      minute: 0,
-      gender: '',
-      ziPolicy: 'sameDay',
-      longitude: REGIONS[0].longitude,
-      ...defaultValues,
+      year: defaultValues.year,
+      month: defaultValues.month,
+      day: defaultValues.day,
+      hour: defaultValues.hour ?? 12,
+      minute: defaultValues.minute ?? 0,
+      gender: defaultValues.gender ?? '',
+      ziPolicy: defaultValues.ziPolicy ?? 'sameDay',
+      longitude: defaultValues.longitude ?? '',
     },
   })
 

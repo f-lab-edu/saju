@@ -14,5 +14,3 @@ export const REGIONS: Region[] = [
   { name: '울산', longitude: 129.31 },
   { name: '제주', longitude: 126.53 },
 ]
-
-export const DEFAULT_LONGITUDE = REGIONS[0].longitude // 서울

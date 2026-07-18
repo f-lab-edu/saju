@@ -76,7 +76,8 @@ describe('억부용신', () => {
     expect(yongSin.direction).toBe('설기제극')
     expect(yongSin.yongSinOSeong).toBe('재성')
     expect(yongSin.yongSin).toBe('목') // 금극목
-    expect(yongSin.huiSin).toBe('화') // 관성
+    // 희신은 식상(식상생재로 재성 용신 보좌) → 금생수 = 수
+    expect(yongSin.huiSin).toBe('수')
   })
 })
 

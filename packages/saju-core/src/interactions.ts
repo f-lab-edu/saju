@@ -170,9 +170,9 @@ export function findRelations(
     char: branches[i],
   })
 
-  // --- 천간 쌍 ---
-  for (let i = 0; i < 4; i++) {
-    for (let j = i + 1; j < 4; j++) {
+  // --- 천간 쌍 --- (시간 모름이면 3개)
+  for (let i = 0; i < stems.length; i++) {
+    for (let j = i + 1; j < stems.length; j++) {
       const a = stems[i]
       const b = stems[j]
       const combineEl = findPairElement(a, b, STEM_COMBINE)
@@ -190,8 +190,12 @@ export function findRelations(
   }
 
   // --- 삼합/방합(3글자) 먼저: 반합 억제에 쓸 국 오행 수집 ---
+  // 시간 모름이면 지지가 3개뿐이라 인덱스 3을 참조하는 조합은 제외.
+  const combos = TRIPLE_INDEX_COMBOS.filter((c) =>
+    c.every((i) => i < branches.length),
+  )
   const fullTripleElements = new Set<Ohaeng>()
-  for (const combo of TRIPLE_INDEX_COMBOS) {
+  for (const combo of combos) {
     const bs = combo.map((i) => branches[i])
     for (const t of BRANCH_TRIPLE) {
       if (tripleMatches(bs, t.members)) {
@@ -224,9 +228,9 @@ export function findRelations(
     }
   }
 
-  // --- 지지 쌍 ---
-  for (let i = 0; i < 4; i++) {
-    for (let j = i + 1; j < 4; j++) {
+  // --- 지지 쌍 --- (시간 모름이면 3개)
+  for (let i = 0; i < branches.length; i++) {
+    for (let j = i + 1; j < branches.length; j++) {
       const a = branches[i]
       const b = branches[j]
       const members = [branchAt(i), branchAt(j)]
@@ -271,8 +275,9 @@ export function findRelations(
   }
 
   // --- 자형(自刑): 같은 글자 2개 이상 ---
+  const allIdx = branches.map((_, i) => i)
   for (const branch of SELF_PUNISH) {
-    const idx = [0, 1, 2, 3].filter((i) => branches[i] === branch)
+    const idx = allIdx.filter((i) => branches[i] === branch)
     if (idx.length >= 2) {
       relations.push({
         type: 'branchPunish',

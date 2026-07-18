@@ -112,10 +112,19 @@ export function computeCorrection(
   opts: CorrectionOptions,
 ): CorrectionResult {
   const standardMeridian = standardMeridianFor(wc)
-  const longitudeCorrectionMinutes =
-    opts.longitude !== undefined
-      ? Math.round((opts.longitude - standardMeridian) * 4)
-      : (opts.longitudeCorrectionMinutes ?? -30)
+  let longitudeCorrectionMinutes: number
+  if (opts.longitude !== undefined) {
+    longitudeCorrectionMinutes = Math.round(
+      (opts.longitude - standardMeridian) * 4,
+    )
+  } else if (opts.longitudeCorrectionMinutes !== undefined) {
+    // 사용자가 직접 지정한 값은 그대로 존중한다.
+    longitudeCorrectionMinutes = opts.longitudeCorrectionMinutes
+  } else {
+    // 기본 -30분은 서울@135° 관례값. 표준 자오선이 127.5°인 시기(1954~1961,
+    // 1908~1911)에는 서울이 이미 진태양시에 가까워 보정이 ~0이 되도록 조정한다.
+    longitudeCorrectionMinutes = -30 + (135 - standardMeridian) * 4
+  }
   const dstApplied = opts.applyDst && inKoreaDst(wc)
   const totalMinutes = longitudeCorrectionMinutes + (dstApplied ? -60 : 0)
   return {

@@ -5,6 +5,7 @@
 import { stemToOhaeng } from './ohaeng'
 import { ohaengToOSeong, oSeongToOhaeng } from './relations'
 import { BRANCH_JIJANGGAN } from './tables'
+
 import type {
   DukPanjeong,
   EokBuYongSin,
@@ -103,16 +104,19 @@ function pickYongSin(
     direction = '설기제극'
     if (oSeong.인성 >= oSeong.비겁) {
       yongSinOSeong = '재성' // 인성 과다 → 財剋印
-      huiOSeong = '관성'
+      huiOSeong = '식상' // 식상생재로 용신 재성을 보좌(관성은 관생인이라 부적합)
     } else {
       yongSinOSeong = '관성' // 비겁 과다 → 官剋比
-      huiOSeong = '식상'
+      huiOSeong = '재성' // 재생관으로 용신 관성을 보좌(식상은 상관견관이라 부적합)
     }
   } else {
     // 신약 계열: 부(扶). 가장 강한 설·극 세력을 상대로.
     direction = '생조'
     const drains: OSeong[] = ['관성', '재성', '식상'] // tie-break 우선순위
-    const drainMax = drains.reduce((a, b) => (oSeong[b] > oSeong[a] ? b : a))
+    const drainMax = drains.reduce(
+      (a, b) => (oSeong[b] > oSeong[a] ? b : a),
+      drains[0],
+    )
     if (drainMax === '관성') {
       yongSinOSeong = '인성' // 殺印相生
       huiOSeong = '비겁'

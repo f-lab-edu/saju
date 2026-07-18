@@ -79,12 +79,30 @@ describe('경도 보정 계산', () => {
     expect(c.dstApplied).toBe(false)
   })
 
-  it('경도 없으면 직접값(기본 -30)', () => {
+  it('경도 없으면 기본 -30 (135° 시기)', () => {
     const c = computeCorrection(
       { year: 2000, month: 1, day: 1, hour: 12, minute: 0 },
       { applyDst: true },
     )
     expect(c.longitudeCorrectionMinutes).toBe(-30)
+  })
+
+  it('경도 없어도 127.5° 시기엔 기본 보정이 ~0으로 조정', () => {
+    // 1958년(127.5°): -30 + (135-127.5)*4 = -30 + 30 = 0
+    const c = computeCorrection(
+      { year: 1958, month: 3, day: 1, hour: 12, minute: 0 },
+      { applyDst: true },
+    )
+    expect(c.standardMeridian).toBe(127.5)
+    expect(c.longitudeCorrectionMinutes).toBe(0)
+  })
+
+  it('사용자가 직접 지정한 보정값은 시기와 무관하게 그대로', () => {
+    const c = computeCorrection(
+      { year: 1958, month: 3, day: 1, hour: 12, minute: 0 },
+      { longitudeCorrectionMinutes: 0, applyDst: true },
+    )
+    expect(c.longitudeCorrectionMinutes).toBe(0)
   })
 })
 
