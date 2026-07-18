@@ -20,3 +20,6 @@ apps/mobile/android/
 # local claude settings (개인 설정은 커밋하지 않음)
 .claude/settings.local.json
 .claude/scheduled_tasks.lock
+
+# playwright MCP 아티팩트 (스크린샷/스냅샷)
+.playwright-mcp/
