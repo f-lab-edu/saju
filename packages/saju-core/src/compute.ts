@@ -1,5 +1,6 @@
 // 최상위 오케스트레이션: 입력 검증 → 태양시 보정 → 엔진 호출 → 도메인 변환.
 import { computeAnalysis } from './analysis'
+import { computeJohu, yongSinRelation } from './johu'
 import { computeRelations } from './interactions'
 import { computeSinSal } from './sinsal'
 import { computeStrength } from './strength'
@@ -85,6 +86,9 @@ export function computeSaju(
     ? toDaeUnList(toEngineDaeUn(corrected, resolved.ziPolicy, input.gender))
     : undefined
 
+  const strength = computeStrength({ year, month, day, hour })
+  const johu = computeJohu(day.gan, month.zhi)
+
   return {
     year,
     month,
@@ -92,7 +96,9 @@ export function computeSaju(
     hour,
     gongMang,
     analysis: computeAnalysis([year, month, day, hour]),
-    strength: computeStrength({ year, month, day, hour }),
+    strength,
+    johu,
+    yongSinRelation: yongSinRelation(johu, strength.yongSin.yongSin),
     relations: computeRelations({ year, month, day, hour }),
     sinSal: computeSinSal({ year, month, day, hour }),
     daeUn,

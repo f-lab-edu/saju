@@ -228,6 +228,21 @@ export interface DukPanjeong {
   deukSe: boolean
 }
 
+/** 조후용신(調候用神). 궁통보감 희용제요 기준. */
+export interface JohuYongSin {
+  /** 1순위 조후 오행 */
+  primary: Ohaeng
+  /** 보조 오행(중복 제거) */
+  secondary: Ohaeng[]
+  /** 궁통보감 원전 천간 순서(예: ['병','계']) */
+  rawStems: HeavenlyStem[]
+  /** 겨울생 화 / 여름생 수처럼 조후가 시급한 경우 */
+  urgent: boolean
+}
+
+/** 억부용신과 조후용신의 관계 */
+export type YongSinRelation = 'aligned' | 'partial' | 'conflict'
+
 /** 억부용신(抑扶用神) 결과 */
 export interface EokBuYongSin {
   /** 용신 오행(1순위) */
@@ -329,8 +344,12 @@ export interface SajuResult {
   gongMang: EarthlyBranch[]
   /** 8글자 기반 오행/십성/오성 분포 */
   analysis: SajuAnalysis
-  /** 가중 세력 기반 신강신약·용신 분석 */
+  /** 가중 세력 기반 신강신약·억부용신 분석 */
   strength: SajuStrengthAnalysis
+  /** 조후용신(궁통보감) */
+  johu: JohuYongSin
+  /** 억부용신과 조후용신의 관계(일치/상생/충돌) */
+  yongSinRelation: YongSinRelation
   /** 8글자에서 발견된 합충형파해 관계 */
   relations: Relation[]
   /** 신살·길성 */

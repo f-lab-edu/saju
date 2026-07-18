@@ -2,6 +2,7 @@
 export { computeSaju, computeWolUn } from './compute'
 export { computeAnalysis } from './analysis'
 export { computeStrength } from './strength'
+export { computeJohu, yongSinRelation } from './johu'
 export { computeRelations, findRelations } from './interactions'
 export { computeSinSal } from './sinsal'
 export { ganziToOhaeng, stemToOhaeng, branchToOhaeng } from './ohaeng'
@@ -27,6 +28,8 @@ export {
   type OhaengStrength,
   type DukPanjeong,
   type EokBuYongSin,
+  type JohuYongSin,
+  type YongSinRelation,
   type SinGangYak,
   type SajuStrengthAnalysis,
   type PillarKey,
