@@ -38,13 +38,16 @@ export function SinSalPanel({ sinSal }: SinSalPanelProps) {
     <section aria-label="신살" className="flex flex-col gap-2">
       <h2 className="text-sm font-semibold text-gray-700">신살·길성</h2>
       <div className="flex flex-wrap gap-1.5">
-        {sinSal.map((s) => (
+        {sinSal.map((s, i) => (
           <span
-            key={s.name}
+            key={`${s.name}-${s.basis}-${i}`}
             className={`rounded px-2 py-0.5 text-xs ${CATEGORY_STYLE[s.category]}`}
           >
             {s.name}
             <span className="ml-1 opacity-70">{positionLabel(s)}</span>
+            {s.basis === '삼합(일지)' && (
+              <span className="ml-1 opacity-50">일지</span>
+            )}
           </span>
         ))}
       </div>

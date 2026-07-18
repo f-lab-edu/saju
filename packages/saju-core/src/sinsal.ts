@@ -62,13 +62,21 @@ export function computeSinSal(pillars: {
   addByBranch('학당귀인', '길성', '일간', [HAKDANG_GWIIN[dayGan]])
   addByBranch('관귀학관', '길성', '일간', [GWANGWI_HAKGWAN[dayGan]])
 
-  // ── 삼합(년지) 기준 ──
-  const samhap = SAMHAP_SINSAL[BRANCH_TO_SAMHAP[year.zhi]]
-  addByBranch('도화살', '흉살', '삼합(년지)', [samhap.도화])
-  addByBranch('역마살', '중립', '삼합(년지)', [samhap.역마])
-  addByBranch('화개살', '중립', '삼합(년지)', [samhap.화개])
-  addByBranch('겁살', '흉살', '삼합(년지)', [samhap.겁살])
-  addByBranch('망신살', '흉살', '삼합(년지)', [samhap.망신])
+  // ── 삼합 기준 (년지 우선, 일지 병행) ──
+  // 유파차: 전통은 년지, 현대 실무는 일지도 병행. 두 기준을 basis로 구분해 담는다.
+  function addSamhap(basisBranch: EarthlyBranch, basis: SinSalBasis): void {
+    const samhap = SAMHAP_SINSAL[BRANCH_TO_SAMHAP[basisBranch]]
+    addByBranch('도화살', '흉살', basis, [samhap.도화])
+    addByBranch('역마살', '중립', basis, [samhap.역마])
+    addByBranch('화개살', '중립', basis, [samhap.화개])
+    addByBranch('겁살', '흉살', basis, [samhap.겁살])
+    addByBranch('망신살', '흉살', basis, [samhap.망신])
+  }
+  addSamhap(year.zhi, '삼합(년지)')
+  // 일지가 년지와 다른 삼합 그룹일 때만 병행(같으면 결과가 동일해 중복).
+  if (BRANCH_TO_SAMHAP[day.zhi] !== BRANCH_TO_SAMHAP[year.zhi]) {
+    addSamhap(day.zhi, '삼합(일지)')
+  }
 
   // ── 현침살(자형): 천간·지지 모두 스캔 ──
   const hyeonchimHits: SinSalHit[] = []

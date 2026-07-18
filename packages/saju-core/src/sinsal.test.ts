@@ -2,9 +2,15 @@ import { describe, expect, it } from 'vitest'
 import { computeSaju } from './compute'
 import type { PillarKey, SinSal } from './types'
 
-// 신살 목록에서 이름으로 찾기
-function find(sinSal: SinSal[], name: string): SinSal | undefined {
-  return sinSal.find((s) => s.name === name)
+// 신살 목록에서 이름(+선택적 basis)으로 찾기
+function find(
+  sinSal: SinSal[],
+  name: string,
+  basis?: string,
+): SinSal | undefined {
+  return sinSal.find(
+    (s) => s.name === name && (basis === undefined || s.basis === basis),
+  )
 }
 
 function pillarsOf(s: SinSal | undefined): PillarKey[] {
@@ -43,16 +49,28 @@ describe('일간(경) 기준 신살', () => {
 
 describe('삼합(년지 오=인오술) 기준 신살', () => {
   it('망신살은 월지 사', () => {
-    const s = find(sinSal, '망신살')
-    expect(s?.basis).toBe('삼합(년지)')
+    const s = find(sinSal, '망신살', '삼합(년지)')
     expect(pillarsOf(s)).toEqual(['month'])
   })
 
-  it('도화(묘)·역마(신)·화개(술)·겁살(해)은 없다', () => {
-    expect(find(sinSal, '도화살')).toBeUndefined()
-    expect(find(sinSal, '역마살')).toBeUndefined()
-    expect(find(sinSal, '화개살')).toBeUndefined()
-    expect(find(sinSal, '겁살')).toBeUndefined()
+  it('년지 기준 도화(묘)·역마(신)·화개(술)·겁살(해)은 없다', () => {
+    expect(find(sinSal, '도화살', '삼합(년지)')).toBeUndefined()
+    expect(find(sinSal, '역마살', '삼합(년지)')).toBeUndefined()
+    expect(find(sinSal, '화개살', '삼합(년지)')).toBeUndefined()
+    expect(find(sinSal, '겁살', '삼합(년지)')).toBeUndefined()
+  })
+})
+
+describe('삼합(일지 진=신자진) 병행 신살', () => {
+  // 일지 진은 년지 오(인오술)와 다른 그룹(신자진)이라 일지 기준을 병행한다.
+  it('화개살은 일지 진(기준 화개=진)', () => {
+    const s = find(sinSal, '화개살', '삼합(일지)')
+    expect(pillarsOf(s)).toEqual(['day'])
+  })
+
+  it('겁살은 월지 사(신자진 기준 겁살=사)', () => {
+    const s = find(sinSal, '겁살', '삼합(일지)')
+    expect(pillarsOf(s)).toEqual(['month'])
   })
 })
 
