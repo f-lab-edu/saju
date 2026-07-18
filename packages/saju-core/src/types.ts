@@ -77,6 +77,9 @@ export interface JiJangGan {
   sipSeong: SipSeong
 }
 
+/** 지장간의 역할(월률분야). 정기=본기. */
+export type JiJangGanRole = '여기' | '중기' | '정기'
+
 /** 사주의 한 기둥(柱): 천간 + 지지 두 글자와 부가 정보 */
 export interface Pillar {
   gan: HeavenlyStem
@@ -195,6 +198,71 @@ export interface SajuAnalysis {
   oSeong: Distribution<OSeong>
 }
 
+/** 신강신약 8단계 */
+export type SinGangYakLevel =
+  | '극약'
+  | '태약'
+  | '신약'
+  | '중화신약'
+  | '중화신강'
+  | '신강'
+  | '태강'
+  | '극왕'
+
+/** 가중 오행 세력(지장간·월령 가중 포함) */
+export interface OhaengStrength {
+  scores: Record<Ohaeng, number>
+  percent: Record<Ohaeng, number>
+  total: number
+}
+
+/** 득령·득지·득시·득세 판정 */
+export interface DukPanjeong {
+  /** 득령(得令): 월지 본기가 일간을 돕는가 */
+  deukRyeong: boolean
+  /** 득지(得地): 일지 본기가 일간을 돕는가 */
+  deukJi: boolean
+  /** 득시(得時): 시지 본기가 일간을 돕는가 */
+  deukSi: boolean
+  /** 득세(得勢): 전체 세력의 절반 이상이 돕는 세력인가 */
+  deukSe: boolean
+}
+
+/** 억부용신(抑扶用神) 결과 */
+export interface EokBuYongSin {
+  /** 용신 오행(1순위) */
+  yongSin: Ohaeng
+  /** 희신 오행(보조) */
+  huiSin: Ohaeng
+  /** 용신의 일간 기준 오성 */
+  yongSinOSeong: OSeong
+  /** '설기제극'(신강) 또는 '생조'(신약) */
+  direction: '설기제극' | '생조'
+}
+
+export interface SinGangYak {
+  /** 돕는 세력(비겁+인성) */
+  supportScore: number
+  /** 빼는 세력(식상+재성+관성) */
+  drainScore: number
+  /** 돕는 세력 비율 0~100 */
+  supportRatio: number
+  level: SinGangYakLevel
+  duk: DukPanjeong
+}
+
+/** 신강신약·용신 통합 분석(가중 세력 기반). 화면 분포와 별개다. */
+export interface SajuStrengthAnalysis {
+  /** 일간 오행 */
+  ilganOhaeng: Ohaeng
+  /** 가중 오행 세력 */
+  ohaengStrength: OhaengStrength
+  /** 일간 기준 오성별 세력 */
+  oSeongStrength: Record<OSeong, number>
+  sinGangYak: SinGangYak
+  yongSin: EokBuYongSin
+}
+
 export interface SajuResult {
   /** 년주(年柱) - 입춘 기준 */
   year: Pillar
@@ -208,6 +276,8 @@ export interface SajuResult {
   gongMang: EarthlyBranch[]
   /** 8글자 기반 오행/십성/오성 분포 */
   analysis: SajuAnalysis
+  /** 가중 세력 기반 신강신약·용신 분석 */
+  strength: SajuStrengthAnalysis
   /**
    * 대운 목록. 방향(순행/역행)이 성별에 따라 갈리므로 gender가 있을 때만 채운다.
    * gender가 없으면 undefined.

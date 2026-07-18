@@ -1,6 +1,7 @@
 // @saju/core 공개 API
 export { computeSaju, computeWolUn } from './compute'
 export { computeAnalysis } from './analysis'
+export { computeStrength } from './strength'
 export { ganziToOhaeng, stemToOhaeng, branchToOhaeng } from './ohaeng'
 export { dayPillarByJdn, gregorianToJdn } from './day-jdn'
 export { naEum } from './naeum'
@@ -19,6 +20,13 @@ export {
   type OSeong,
   type Distribution,
   type SajuAnalysis,
+  type JiJangGanRole,
+  type SinGangYakLevel,
+  type OhaengStrength,
+  type DukPanjeong,
+  type EokBuYongSin,
+  type SinGangYak,
+  type SajuStrengthAnalysis,
   type DaeUn,
   type YeonUn,
   type WolUn,
