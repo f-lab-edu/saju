@@ -5,11 +5,12 @@
   "scripts": {
     "dev:web": "pnpm --filter web dev",
     "dev:mobile": "pnpm --filter mobile start",
-    "format": "prettier --write .",
+    "format": "oxfmt",
+    "format:check": "oxfmt --check",
     "lint": "pnpm --filter web lint"
   },
   "devDependencies": {
-    "prettier": "^3.5.0"
+    "oxfmt": "^0.59.0"
   },
   "pnpm": {
     "overrides": {

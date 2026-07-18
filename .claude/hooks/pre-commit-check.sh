@@ -39,7 +39,7 @@ log=$(mktemp)
 trap 'rm -f "$log"' EXIT
 
 if echo "$changed" | grep -q "^apps/web/"; then
-  if ! pnpm --filter web exec tsc --noEmit >"$log" 2>&1; then
+  if ! pnpm --filter web exec tsgo --noEmit >"$log" 2>&1; then
     deny "[pre-commit-check] 커밋 차단 — apps/web 타입체크 실패. 오류를 고친 뒤 다시 커밋하세요:
 $(head -15 "$log")"
   fi
@@ -54,7 +54,7 @@ $(grep -E "FAIL|✕|Tests" "$log" | head -10)"
 fi
 
 if echo "$changed" | grep -q "^apps/mobile/"; then
-  if ! (cd apps/mobile && pnpm exec tsc --noEmit) >"$log" 2>&1; then
+  if ! (cd apps/mobile && pnpm exec tsgo --noEmit) >"$log" 2>&1; then
     deny "[pre-commit-check] 커밋 차단 — apps/mobile 타입체크 실패:
 $(head -15 "$log")"
   fi

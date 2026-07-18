@@ -2,10 +2,13 @@
   "permissions": {
     "allow": [
       "Bash(pnpm install)",
-      "Bash(pnpm exec prettier:*)",
+      "Bash(pnpm exec oxfmt:*)",
       "Bash(pnpm --filter web test:*)",
       "Bash(pnpm --filter web generate-routes)",
-      "Bash(pnpm exec tsc:*)",
+      "Bash(pnpm exec tsgo:*)",
+      "Bash(pnpm --filter web exec tsgo:*)",
+      "Bash(pnpm --filter web exec oxlint:*)",
+      "Bash(pnpm --filter web lint)",
       "Bash(pnpm --filter web exec vitest:*)",
       "Bash(git status:*)",
       "Bash(git diff:*)",
