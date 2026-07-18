@@ -172,6 +172,29 @@ export interface WolUn extends GanZhi {
   monthLabel: string
 }
 
+/** 오성(五星): 십성을 음양 쌍으로 묶은 5그룹. (흔히 '육친'으로도 부른다) */
+export type OSeong = '비겁' | '식상' | '재성' | '관성' | '인성'
+
+/** 어떤 분류(오행/십성/오성)의 개수·분모·퍼센트 분포 */
+export interface Distribution<K extends string> {
+  /** 분류별 개수 */
+  counts: Record<K, number>
+  /** 분모(오행·십성·오성 모두 8글자 기준) */
+  total: number
+  /** 퍼센트. 분모 8이라 12.5 배수로 떨어진다. */
+  percent: Record<K, number>
+}
+
+/** 사주 8글자 기반 분포 분석(화면 표시용, 지장간 제외 균등 카운트) */
+export interface SajuAnalysis {
+  /** 오행 분포: 천간4 + 지지4 = 8글자 */
+  ohaeng: Distribution<Ohaeng>
+  /** 십성 분포: 천간4(일원→비견) + 지지 정기4 */
+  sipSeong: Distribution<SipSeong>
+  /** 오성 분포: 십성을 5그룹으로 묶은 것 */
+  oSeong: Distribution<OSeong>
+}
+
 export interface SajuResult {
   /** 년주(年柱) - 입춘 기준 */
   year: Pillar
@@ -183,6 +206,8 @@ export interface SajuResult {
   hour: Pillar
   /** 공망(空亡): 일주 기준으로 비어 있는 두 지지 */
   gongMang: EarthlyBranch[]
+  /** 8글자 기반 오행/십성/오성 분포 */
+  analysis: SajuAnalysis
   /**
    * 대운 목록. 방향(순행/역행)이 성별에 따라 갈리므로 gender가 있을 때만 채운다.
    * gender가 없으면 undefined.
