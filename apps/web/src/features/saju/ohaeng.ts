@@ -17,8 +17,21 @@ const OHAENG_HANJA: Record<Ohaeng, string> = {
   수: '水',
 }
 
+// 막대 그래프용 진한 채움색
+const OHAENG_BAR: Record<Ohaeng, string> = {
+  목: 'bg-emerald-500',
+  화: 'bg-red-500',
+  토: 'bg-amber-500',
+  금: 'bg-stone-400',
+  수: 'bg-sky-500',
+}
+
 export function ohaengStyle(ohaeng: Ohaeng): string {
   return OHAENG_STYLE[ohaeng]
+}
+
+export function ohaengBar(ohaeng: Ohaeng): string {
+  return OHAENG_BAR[ohaeng]
 }
 
 export function ohaengHanja(ohaeng: Ohaeng): string {

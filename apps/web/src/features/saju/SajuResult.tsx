@@ -1,5 +1,6 @@
 import { computeSaju } from '@saju/core'
 import type { SajuInput, SajuResult as SajuResultType } from '@saju/core'
+import { AnalysisPanel } from './AnalysisPanel'
 import { DaeUnTable } from './DaeUnTable'
 import { PillarCard } from './PillarCard'
 
@@ -46,6 +47,8 @@ export function SajuResult({ input }: SajuResultProps) {
       </div>
 
       <p className="text-xs text-gray-500">공망: {result.gongMang.join('·')}</p>
+
+      <AnalysisPanel analysis={result.analysis} />
 
       {result.daeUn ? (
         <DaeUnTable daeUn={result.daeUn} />

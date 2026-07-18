@@ -1,4 +1,5 @@
 // 최상위 오케스트레이션: 입력 검증 → 태양시 보정 → 엔진 호출 → 도메인 변환.
+import { computeAnalysis } from './analysis'
 import { toDaeUnList, toWolUnList } from './daeun'
 import { toEngineDaeUn, toEnginePillars, toEngineWolUn } from './engine'
 import { branchFromHanja } from './ganzhi'
@@ -68,6 +69,11 @@ export function computeSaju(
   )
   const engine = toEnginePillars(corrected, resolved.ziPolicy)
 
+  const year = toPillar(engine.year)
+  const month = toPillar(engine.month)
+  const day = toPillar(engine.day)
+  const hour = toPillar(engine.time)
+
   // 공망: '申酉' 두 글자를 각각 지지로.
   const gongMang = [...engine.dayXunKong].map(branchFromHanja)
 
@@ -77,11 +83,12 @@ export function computeSaju(
     : undefined
 
   return {
-    year: toPillar(engine.year),
-    month: toPillar(engine.month),
-    day: toPillar(engine.day),
-    hour: toPillar(engine.time),
+    year,
+    month,
+    day,
+    hour,
     gongMang,
+    analysis: computeAnalysis([year, month, day, hour]),
     daeUn,
     input,
     options: resolved,
