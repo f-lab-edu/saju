@@ -12,7 +12,7 @@ pnpm --filter web test              # 전체 (vitest run)
 pnpm --filter web exec vitest run src/components/Foo.test.tsx   # 단일 파일
 ```
 
-- 설정: `apps/web/vitest.config.ts` (jsdom + React Compiler babel). `vite.config.ts`가 아니다 — 거긴 nitro 등 서버 플러그인이 있어 테스트에 못 쓴다.
+- 설정: `apps/web/vitest.config.ts` (jsdom + React Compiler babel). `vite.config.ts`가 아니다. 거긴 nitro 등 서버 플러그인이 있어 테스트에 못 쓴다.
 - setup: `src/test/setup.ts`에서 jest-dom 매처 로드됨 (`toBeInTheDocument` 등).
 
 ## 기본 규칙
@@ -44,7 +44,7 @@ function renderWithQuery(ui: React.ReactElement) {
 }
 ```
 
-- `useSuspenseQuery` 컴포넌트는 반드시 Suspense 경계 안에서 렌더해야 한다 — 프로덕션과 동일하게 `AsyncBoundary`로 감싸서 테스트한다 (`AsyncBoundary.test.tsx` 참고).
+- `useSuspenseQuery` 컴포넌트는 반드시 Suspense 경계 안에서 렌더해야 한다. 프로덕션과 동일하게 `AsyncBoundary`로 감싸서 테스트한다 (`AsyncBoundary.test.tsx` 참고).
 - 로딩 상태 단언: `getByRole('status')` (AsyncBoundary 기본 스피너), 데이터 대기: `await screen.findByText(...)`, 에러 상태: `await screen.findByRole('alert')`.
 - `waitFor` 안에서 부수효과 금지.
 
@@ -64,6 +64,6 @@ beforeEach(() => useBirthStore.setState(initialState, true))
 
 ## 커버리지 우선순위
 
-1. 사주 계산 로직 (순수 함수 — 경계 케이스 필수: 입춘, 절기, 자시)
+1. 사주 계산 로직 (순수 함수, 경계 케이스 필수: 입춘, 절기, 자시)
 2. 폼 검증 규칙
 3. 쿼리 성공/로딩/에러 3상태 렌더링

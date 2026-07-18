@@ -3,20 +3,20 @@ name: ship
 description: 변경사항을 검증 → 커밋 → (필요시 브랜치 생성) → 머지 또는 PR까지 처리하는 워크플로. "커밋해줘", "머지해줘", "PR/MR 만들어줘", "배포 준비" 요청 시 사용.
 ---
 
-# /ship — 검증 → 커밋 → 머지/PR
+# /ship: 검증 → 커밋 → 머지/PR
 
-단계를 건너뛰지 말 것. 특히 1단계(검증) 전에 커밋하지 않는다 — pre-commit-check hook이 어차피 차단한다.
+단계를 건너뛰지 말 것. 특히 1단계(검증) 전에 커밋하지 않는다 (pre-commit-check hook이 어차피 차단한다).
 
 ## 1. 검증 (실패 시 여기서 중단)
 
 변경 파일을 파악하고(`git status --porcelain`), 변경된 워크스페이스만 검사한다:
 
-| 변경 위치      | 실행할 검사                                                                                            |
-| -------------- | ------------------------------------------------------------------------------------------------------ |
-| `apps/web/`    | `pnpm --filter web exec tsc --noEmit` → `pnpm --filter web lint` → `pnpm --filter web exec vitest run` |
-| `apps/mobile/` | `cd apps/mobile && pnpm exec tsc --noEmit`                                                             |
-| `packages/`    | 해당 패키지의 tsc + 테스트                                                                             |
-| 루트 설정만    | 검사 생략 가능 (`.claude/`, `*.md`, 설정 파일)                                                         |
+| 변경 위치      | 실행할 검사                                                                                             |
+| -------------- | ------------------------------------------------------------------------------------------------------- |
+| `apps/web/`    | `pnpm --filter web exec tsgo --noEmit` → `pnpm --filter web lint` → `pnpm --filter web exec vitest run` |
+| `apps/mobile/` | `cd apps/mobile && pnpm exec tsgo --noEmit`                                                             |
+| `packages/`    | 해당 패키지의 tsgo + 테스트                                                                             |
+| 루트 설정만    | 검사 생략 가능 (`.claude/`, `*.md`, 설정 파일)                                                          |
 
 실패하면 **커밋하지 말고** 오류를 사용자에게 보고한다. 수정 요청을 받으면 고친 뒤 1단계부터 다시.
 
@@ -40,7 +40,7 @@ description: 변경사항을 검증 → 커밋 → (필요시 브랜치 생성) 
 
 리모트 유무로 분기한다 (`git remote -v`):
 
-**리모트 없음 (현재 상태)** — 로컬 머지:
+**리모트 없음 (현재 상태)**, 로컬 머지:
 
 ```bash
 git switch main
@@ -48,7 +48,7 @@ git merge --no-ff <작업브랜치> -m "merge: <작업브랜치>"
 git branch -d <작업브랜치>
 ```
 
-**리모트 있음** — push 후 PR:
+**리모트 있음**, push 후 PR:
 
 ```bash
 git push -u origin <작업브랜치>
@@ -60,7 +60,7 @@ gh pr create --title "<커밋 제목과 동일>" --body "<요약 + 검증 결과
 
 ## 확인이 필요한 지점
 
-- push와 PR 생성은 외부 공개 작업이다 — 사용자가 명시적으로 요청하지 않았다면 실행 전에 확인받는다.
+- push와 PR 생성은 외부 공개 작업이다. 사용자가 명시적으로 요청하지 않았다면 실행 전에 확인받는다.
 - main으로의 로컬 머지는 이 워크플로 안에서는 확인 없이 진행해도 된다 (사용자가 /ship으로 의도를 밝힌 것).
 
 ## 완료 보고
