@@ -37,3 +37,91 @@ export function applySolarTimeCorrection(
   if (correctionMinutes === 0) return wc
   return shiftMinutes(wc, correctionMinutes)
 }
+
+// ─── 한국 표준시 이력 ───
+
+function ymdNum(wc: WallClock): number {
+  return wc.year * 10000 + wc.month * 100 + wc.day
+}
+
+// 표준 자오선이 동경 127.5도였던 구간(그 외는 135도).
+// 1908-04-01~1911-12-31, 1954-03-21~1961-08-09.
+const MERIDIAN_1275_PERIODS: [number, number][] = [
+  [19080401, 19111231],
+  [19540321, 19610809],
+]
+
+/** 해당 날짜에 유효했던 표준 자오선(동경, 도) */
+export function standardMeridianFor(wc: WallClock): number {
+  const n = ymdNum(wc)
+  for (const [start, end] of MERIDIAN_1275_PERIODS) {
+    if (n >= start && n <= end) return 127.5
+  }
+  return 135
+}
+
+// 한국 서머타임(일광절약시간) 시행 구간(IANA Asia/Seoul 기준, 날짜 단위 근사).
+// 이 구간 출생은 벽시계가 표준시보다 1시간 빠르므로 -60분 보정한다.
+const DST_PERIODS: [number, number][] = [
+  [19480601, 19480912],
+  [19490403, 19490910],
+  [19500401, 19500910],
+  [19510506, 19510908],
+  [19550505, 19550908],
+  [19560520, 19560929],
+  [19570505, 19570921],
+  [19580504, 19580920],
+  [19590503, 19590919],
+  [19600501, 19600917],
+  [19870510, 19871010],
+  [19880508, 19881008],
+]
+
+/** 해당 날짜가 한국 서머타임 시행 구간인지 */
+export function inKoreaDst(wc: WallClock): boolean {
+  const n = ymdNum(wc)
+  return DST_PERIODS.some(([start, end]) => n >= start && n <= end)
+}
+
+export interface CorrectionOptions {
+  /** 출생지 동경 경도. 주면 자오선 이력과 함께 정밀 계산. */
+  longitude?: number
+  /** longitude가 없을 때 쓰는 직접 보정값(분). 기본 -30. */
+  longitudeCorrectionMinutes?: number
+  /** 서머타임 자동 보정 여부 */
+  applyDst: boolean
+}
+
+export interface CorrectionResult {
+  /** 실제 적용된 경도 보정(분, 서머타임 제외) */
+  longitudeCorrectionMinutes: number
+  /** 서머타임 적용 여부 */
+  dstApplied: boolean
+  /** 적용된 표준 자오선(동경) */
+  standardMeridian: number
+  /** 경도 보정 + 서머타임까지 합친 총 이동(분) */
+  totalMinutes: number
+}
+
+/**
+ * 날짜에 유효한 표준 자오선·서머타임을 반영한 태양시 보정량을 계산한다.
+ * 경도(longitude)가 있으면 (경도 - 자오선) × 4분으로, 없으면 직접값(-30 기본)으로.
+ */
+export function computeCorrection(
+  wc: WallClock,
+  opts: CorrectionOptions,
+): CorrectionResult {
+  const standardMeridian = standardMeridianFor(wc)
+  const longitudeCorrectionMinutes =
+    opts.longitude !== undefined
+      ? Math.round((opts.longitude - standardMeridian) * 4)
+      : (opts.longitudeCorrectionMinutes ?? -30)
+  const dstApplied = opts.applyDst && inKoreaDst(wc)
+  const totalMinutes = longitudeCorrectionMinutes + (dstApplied ? -60 : 0)
+  return {
+    longitudeCorrectionMinutes,
+    dstApplied,
+    standardMeridian,
+    totalMinutes,
+  }
+}

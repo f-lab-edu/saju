@@ -21,7 +21,7 @@ describe('computeSaju 기본 계산', () => {
     expect(ganzi(result.year)).toBe('경오')
     expect(ganzi(result.month)).toBe('신사')
     expect(ganzi(result.day)).toBe('경진')
-    expect(ganzi(result.hour)).toBe('계미')
+    expect(ganzi(result.hour!)).toBe('계미')
   })
 
   it('각 글자의 오행', () => {
@@ -76,7 +76,7 @@ describe('자시(子時) 정책', () => {
   it('sameDay(기본): 야자시 일주는 당일(경진)', () => {
     const r = computeSaju(base, { longitudeCorrectionMinutes: 0 })
     expect(ganzi(r.day)).toBe('경진')
-    expect(r.hour.zhi).toBe('자')
+    expect(r.hour!.zhi).toBe('자')
   })
 
   it('nextDay: 야자시 일주는 다음 날(신사)', () => {
@@ -85,7 +85,7 @@ describe('자시(子時) 정책', () => {
       ziPolicy: 'nextDay',
     })
     expect(ganzi(r.day)).toBe('신사')
-    expect(r.hour.zhi).toBe('자')
+    expect(r.hour!.zhi).toBe('자')
   })
 })
 
@@ -101,12 +101,12 @@ describe('태양시 경도 보정', () => {
 
   it('보정 0이면 미시', () => {
     const r = computeSaju(base, { longitudeCorrectionMinutes: 0 })
-    expect(r.hour.zhi).toBe('미')
+    expect(r.hour!.zhi).toBe('미')
   })
 
   it('-30분 보정이면 시주가 오시로 바뀐다', () => {
     const r = computeSaju(base, { longitudeCorrectionMinutes: -30 })
-    expect(r.hour.zhi).toBe('오')
+    expect(r.hour!.zhi).toBe('오')
   })
 })
 

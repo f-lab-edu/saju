@@ -20,7 +20,7 @@ describe('십성(十星)', () => {
     expect(r.year.ganSipSeong).toBe('비견') // 경(년간) vs 경(일간)
     expect(r.month.ganSipSeong).toBe('겁재') // 신
     expect(r.day.ganSipSeong).toBe('일원') // 일간 자신
-    expect(r.hour.ganSipSeong).toBe('상관') // 계
+    expect(r.hour!.ganSipSeong).toBe('상관') // 계
   })
 
   it('지지 십성(정기 기준)', () => {
@@ -52,7 +52,7 @@ describe('12운성(十二運星)', () => {
     expect(r.year.unSeong).toBe('목욕') // 경 in 오
     expect(r.month.unSeong).toBe('장생') // 경 in 사
     expect(r.day.unSeong).toBe('양') // 경 in 진
-    expect(r.hour.unSeong).toBe('관대') // 경 in 미
+    expect(r.hour!.unSeong).toBe('관대') // 경 in 미
   })
 })
 

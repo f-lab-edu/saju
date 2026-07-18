@@ -29,11 +29,13 @@ export function computeSinSal(pillars: {
   year: Pillar
   month: Pillar
   day: Pillar
-  hour: Pillar
+  hour: Pillar | null
 }): SinSal[] {
   const { year, month, day, hour } = pillars
-  const stems: HeavenlyStem[] = [year.gan, month.gan, day.gan, hour.gan]
-  const branches: EarthlyBranch[] = [year.zhi, month.zhi, day.zhi, hour.zhi]
+  // 시간 모름이면 시주 없이 3기둥만 스캔(KEYS 인덱스가 year/month/day에 대응).
+  const list = hour ? [year, month, day, hour] : [year, month, day]
+  const stems: HeavenlyStem[] = list.map((p) => p.gan)
+  const branches: EarthlyBranch[] = list.map((p) => p.zhi)
   const dayGan = day.gan
   const result: SinSal[] = []
 
