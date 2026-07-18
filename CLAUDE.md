@@ -59,7 +59,7 @@ pnpm workspace 모노레포:
 - `.claude/hooks/`: 자동 포맷+lint(format-file: oxfmt 후 apps/web 파일은 oxlint --fix, 남은 오류는 Claude에 피드백), .env 보호, 완료 알림, 수동 메모 경고, useQuery 경고, 서브에이전트 라우팅 힌트(UserPromptSubmit), 커밋 전 검증 강제(pre-commit-check: tsgo/lint/테스트 실패 시 git commit 차단), routeTree.gen.ts 편집 차단(protect-routetree), react/react-dom 버전 드리프트 경고(check-react-version: web·mobile package.json 편집 시 버전 불일치 감지)
 - `.claude/agents/`: saju-master(사주 도메인 전문가), debugger(진단 전용 디버깅, 수정 금지)
 - `.claude/rules/`: 항상 로드되는 규칙 파일(`.md`만 인식, `.mdx` 불가). performance.md(모델 선택·컨텍스트 관리), markdown-style.md(md 작성 시 em-dash 금지·강조 최소화). frontmatter `paths:` glob을 주면 해당 파일을 읽을 때만 조건부 로드
-- `.claude/skills/`: dev-servers(두 앱 실행), saju-calc(공유 도메인 규칙), ship(/ship: 검증→커밋→브랜치→머지/PR 워크플로)
+- `.claude/skills/`: dev-servers(두 앱 실행), saju-calc(공유 도메인 규칙), commit(/commit: diff 분석→한국어 커밋), pr(/pr: PR 제목·본문 작성→생성, MCP 실패 시 gh CLI 폴백). 검증→커밋→PR을 잇던 ship 스킬은 이 둘과 pre-commit-check hook으로 분산돼 제거함
 - `.mcp.json`: MCP 서버 (context7 문서 조회, playwright 브라우저, github 원격 MCP로 PR·이슈·리뷰). github는 HTTP 원격 서버라 최초 1회 `/mcp`에서 OAuth 인증 필요
 
 apps/web (웹 전용):
