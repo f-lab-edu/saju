@@ -34,6 +34,25 @@ describe('조후용신 룩업 (궁통보감)', () => {
     expect(j.secondary).toEqual(['금', '화', '토']) // 경·병·무
     expect(j.rawStems).toEqual(['갑', '경', '병', '무'])
   })
+
+  // 전수 검증(궁통보감 대조)에서 정정한 칸들
+  it('경금 인월 → 화(병) 우선 (무土 아님)', () => {
+    const j = computeJohu('경', '인')
+    expect(j.rawStems).toEqual(['병', '갑', '정', '임', '무'])
+    expect(j.primary).toBe('화') // 조후는 병화 온난이 우선
+  })
+
+  it('기토 인월 → 병·경·갑 (2순위는 금, 수 아님)', () => {
+    const j = computeJohu('기', '인')
+    expect(j.rawStems).toEqual(['병', '경', '갑']) // 정월 기토는 忌壬水
+    expect(j.primary).toBe('화')
+  })
+
+  it('신금 술월 → 임·갑 (병 아님)', () => {
+    const j = computeJohu('신', '술')
+    expect(j.rawStems).toEqual(['임', '갑']) // 土厚埋金이라 갑으로 소통
+    expect(j.primary).toBe('수')
+  })
 })
 
 describe('억부·조후 관계 판정', () => {
