@@ -99,11 +99,16 @@ function Home() {
   }
 
   return (
-    <main className="mx-auto flex max-w-xl flex-col gap-8 p-6">
-      <header>
-        <h1 className="text-2xl font-bold">사주팔자</h1>
-        <p className="mt-1 text-sm text-gray-500">
-          생년월일시를 입력하면 사주 네 기둥과 오행을 보여줍니다.
+    <main className="mx-auto flex max-w-2xl flex-col gap-6 px-4 py-8 sm:px-6">
+      <header className="border-b border-line pb-5">
+        <p className="text-xs tracking-[0.3em] text-ink-faint uppercase">
+          萬歲曆
+        </p>
+        <h1 className="mt-1 font-myeongjo text-4xl font-extrabold tracking-tight">
+          사주팔자
+        </h1>
+        <p className="mt-2 text-sm text-ink-soft">
+          생년월일시로 사주 네 기둥과 오행, 신강신약과 용신까지 풀어 봅니다.
         </p>
       </header>
 

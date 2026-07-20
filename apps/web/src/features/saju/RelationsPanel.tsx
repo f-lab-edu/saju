@@ -1,10 +1,10 @@
 import type { Relation, RelationType } from '@saju/core'
+import { Panel } from './Panel'
 
 interface RelationsPanelProps {
   relations: Relation[]
 }
 
-// 합류(합·삼합·방합)는 긍정 계열, 충·형·파·해·원진은 주의 계열로 색을 나눈다.
 const HARMONY: RelationType[] = [
   'stemCombine',
   'branchCombine',
@@ -37,35 +37,29 @@ function relationName(r: Relation): string {
 }
 
 export function RelationsPanel({ relations }: RelationsPanelProps) {
-  if (relations.length === 0) {
-    return (
-      <section aria-label="합충형파해" className="flex flex-col gap-2">
-        <h2 className="text-sm font-semibold text-gray-700">합충형파해</h2>
-        <p className="text-xs text-gray-400">특별한 관계가 없습니다.</p>
-      </section>
-    )
-  }
-
   return (
-    <section aria-label="합충형파해" className="flex flex-col gap-2">
-      <h2 className="text-sm font-semibold text-gray-700">합충형파해</h2>
-      <div className="flex flex-wrap gap-1.5">
-        {relations.map((r, i) => {
-          const harmony = HARMONY.includes(r.type)
-          return (
-            <span
-              key={`${r.type}-${i}`}
-              className={`rounded px-2 py-0.5 text-xs ${
-                harmony
-                  ? 'bg-sky-100 text-sky-800'
-                  : 'bg-rose-100 text-rose-800'
-              }`}
-            >
-              {relationName(r)}
-            </span>
-          )
-        })}
-      </div>
-    </section>
+    <Panel title="합충형파해" hanja="合沖刑破害">
+      {relations.length === 0 ? (
+        <p className="text-sm text-ink-faint">별다른 관계가 없습니다.</p>
+      ) : (
+        <div className="flex flex-wrap gap-1.5">
+          {relations.map((r, i) => {
+            const harmony = HARMONY.includes(r.type)
+            return (
+              <span
+                key={`${r.type}-${i}`}
+                className={`rounded-md border px-2.5 py-1 text-xs ${
+                  harmony
+                    ? 'border-mok/30 bg-mok/8 text-mok'
+                    : 'border-hwa/30 bg-hwa/8 text-hwa'
+                }`}
+              >
+                {relationName(r)}
+              </span>
+            )
+          })}
+        </div>
+      )}
+    </Panel>
   )
 }

@@ -6,7 +6,7 @@ import type {
 } from '@saju/core'
 import { AnalysisPanel } from './AnalysisPanel'
 import { DaeUnTable } from './DaeUnTable'
-import { PillarCard } from './PillarCard'
+import { MyeongsikTable } from './MyeongsikTable'
 import { RelationsPanel } from './RelationsPanel'
 import { SinSalPanel } from './SinSalPanel'
 import { StrengthPanel } from './StrengthPanel'
@@ -37,7 +37,10 @@ export function SajuResult({ input, options }: SajuResultProps) {
 
   if (!state.ok) {
     return (
-      <p role="alert" className="rounded-lg bg-red-50 p-4 text-red-800">
+      <p
+        role="alert"
+        className="rounded-lg border border-hwa/30 bg-hwa/8 p-4 text-sm text-hwa"
+      >
         {state.message}
       </p>
     )
@@ -46,50 +49,41 @@ export function SajuResult({ input, options }: SajuResultProps) {
   const { result } = state
 
   return (
-    <section aria-label="사주 결과" className="flex flex-col gap-4">
-      <div className="grid grid-cols-4 gap-3">
-        <PillarCard label="년주" pillar={result.year} />
-        <PillarCard label="월주" pillar={result.month} />
-        <PillarCard label="일주" pillar={result.day} />
-        {result.hour ? (
-          <PillarCard label="시주" pillar={result.hour} />
-        ) : (
-          <div className="flex flex-col items-center gap-1.5 text-center">
-            <span className="text-sm font-medium text-gray-500">시주</span>
-            <span className="mt-4 text-xs text-gray-400">시간 모름</span>
-          </div>
-        )}
-      </div>
-
-      <p className="text-xs text-gray-500">공망: {result.gongMang.join('·')}</p>
-
-      <StrengthPanel
-        strength={result.strength}
-        johu={result.johu}
-        yongSinRelation={result.yongSinRelation}
+    <div className="flex flex-col gap-4">
+      <MyeongsikTable
+        year={result.year}
+        month={result.month}
+        day={result.day}
+        hour={result.hour}
       />
 
-      <RelationsPanel relations={result.relations} />
-
-      <SinSalPanel sinSal={result.sinSal} />
-
-      <AnalysisPanel analysis={result.analysis} />
+      <div className="grid gap-4 md:grid-cols-2">
+        <StrengthPanel
+          strength={result.strength}
+          johu={result.johu}
+          yongSinRelation={result.yongSinRelation}
+        />
+        <AnalysisPanel analysis={result.analysis} />
+        <RelationsPanel relations={result.relations} />
+        <SinSalPanel sinSal={result.sinSal} />
+      </div>
 
       {result.daeUn ? (
         <DaeUnTable daeUn={result.daeUn} />
       ) : (
-        <p className="text-xs text-gray-400">
+        <p className="rounded-lg border border-line bg-hanji-raised px-4 py-3 text-xs text-ink-soft">
           성별을 선택하면 대운을 볼 수 있습니다.
         </p>
       )}
 
-      <p className="text-xs text-gray-400">
-        자시 {result.options.ziPolicy === 'sameDay' ? '당일' : '다음날'} ·
-        태양시 보정 {result.options.longitudeCorrectionMinutes}분 · 표준자오선{' '}
+      <p className="px-1 text-xs text-ink-faint">
+        공망 {result.gongMang.join('·')} · 자시{' '}
+        {result.options.ziPolicy === 'sameDay' ? '당일' : '다음날'} · 태양시{' '}
+        {result.options.longitudeCorrectionMinutes}분 · 자오선{' '}
         {result.options.standardMeridian}°
-        {result.options.dstApplied && ' · 서머타임 -60분'}
+        {result.options.dstApplied && ' · 서머타임 −60분'}
         {result.options.timeUnknown && ' · 시간 모름'}
       </p>
-    </section>
+    </div>
   )
 }

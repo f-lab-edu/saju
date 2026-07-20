@@ -1,5 +1,29 @@
 @import 'tailwindcss';
 
+/* 명조체(간지·제목)만 웹폰트로. 본문은 시스템 한글 고딕 스택으로 가볍게. */
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&display=swap');
+
+@theme {
+  /* 한지·먹 */
+  --color-hanji: #f4efe3;
+  --color-hanji-raised: #fbf9f2;
+  --color-ink: #23201b;
+  --color-ink-soft: #6f6656;
+  --color-ink-faint: #a89e8a;
+  --color-line: #ded4c0;
+
+  /* 오방색(五方色) 오행 안료: 목靑 화赤 토黃 금白 수黑 */
+  --color-mok: #2f6e5b;
+  --color-hwa: #b8402e;
+  --color-to: #c2913a;
+  --color-geum: #6f7c88;
+  --color-su: #2b3a49;
+
+  --font-myeongjo: 'Nanum Myeongjo', serif;
+  --font-sans:
+    'Pretendard', 'Apple SD Gothic Neo', 'Malgun Gothic', system-ui, sans-serif;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -12,4 +36,33 @@ body,
 
 body {
   margin: 0;
+  background-color: var(--color-hanji);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  /* 한지 결: 아주 옅은 세로 격자와 얼룩 */
+  background-image:
+    radial-gradient(
+      circle at 20% 15%,
+      rgba(201, 154, 58, 0.05),
+      transparent 45%
+    ),
+    radial-gradient(circle at 85% 80%, rgba(47, 110, 91, 0.04), transparent 40%);
+  background-attachment: fixed;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  .rise {
+    animation: rise 0.5s ease-out both;
+  }
 }

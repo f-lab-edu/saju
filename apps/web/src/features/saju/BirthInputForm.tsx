@@ -22,6 +22,10 @@ interface BirthInputFormProps {
   onSubmit: (values: BirthFormValues) => void
 }
 
+const FIELD_LABEL = 'text-sm font-medium text-ink-soft'
+const FIELD_CLASS =
+  'rounded-lg border border-line bg-hanji px-3 py-2 text-ink focus:border-ink focus:outline-none disabled:bg-line/25 disabled:text-ink-faint'
+
 type NumberFieldName = 'year' | 'month' | 'day' | 'hour' | 'minute'
 
 interface NumberFieldProps {
@@ -47,7 +51,7 @@ function NumberField({
 }: NumberFieldProps) {
   return (
     <div className="flex flex-col gap-1">
-      <label htmlFor={name} className="text-sm font-medium text-gray-700">
+      <label htmlFor={name} className={FIELD_LABEL}>
         {label}
       </label>
       <input
@@ -58,7 +62,7 @@ function NumberField({
         disabled={disabled}
         aria-invalid={errors[name] ? true : undefined}
         aria-describedby={errors[name] ? `${name}-error` : undefined}
-        className="rounded-lg border border-gray-300 px-3 py-2 focus:border-gray-900 focus:outline-none disabled:bg-gray-100 disabled:text-gray-400"
+        className={FIELD_CLASS}
         {...register(name, {
           required: disabled ? false : `${label}을(를) 입력하세요`,
           valueAsNumber: true,
@@ -67,7 +71,7 @@ function NumberField({
         })}
       />
       {errors[name] && (
-        <p id={`${name}-error`} role="alert" className="text-xs text-red-600">
+        <p id={`${name}-error`} role="alert" className="text-xs text-hwa">
           {errors[name]?.message}
         </p>
       )}
@@ -107,7 +111,7 @@ export function BirthInputForm({
   return (
     <form
       onSubmit={handleSubmit((values) => onSubmit({ ...values, timeUnknown }))}
-      className="flex flex-col gap-4"
+      className="flex flex-col gap-4 rounded-xl border border-line bg-hanji-raised p-4 sm:p-5"
       noValidate
     >
       <div className="grid grid-cols-3 gap-3">
@@ -157,14 +161,10 @@ export function BirthInputForm({
           errors={errors}
         />
         <div className="flex flex-col gap-1">
-          <label htmlFor="gender" className="text-sm font-medium text-gray-700">
+          <label htmlFor="gender" className={FIELD_LABEL}>
             성별
           </label>
-          <select
-            id="gender"
-            className="rounded-lg border border-gray-300 px-3 py-2 focus:border-gray-900 focus:outline-none"
-            {...register('gender')}
-          >
+          <select id="gender" className={FIELD_CLASS} {...register('gender')}>
             <option value="">선택 안 함</option>
             <option value="male">남</option>
             <option value="female">여</option>
@@ -172,9 +172,10 @@ export function BirthInputForm({
         </div>
       </div>
 
-      <label className="flex items-center gap-2 text-sm text-gray-700">
+      <label className="flex items-center gap-2 text-sm text-ink-soft">
         <input
           type="checkbox"
+          className="accent-ink"
           checked={timeUnknown}
           onChange={(e) => setTimeUnknown(e.target.checked)}
         />
@@ -183,15 +184,12 @@ export function BirthInputForm({
 
       <div className="grid grid-cols-2 gap-3">
         <div className="flex flex-col gap-1">
-          <label
-            htmlFor="ziPolicy"
-            className="text-sm font-medium text-gray-700"
-          >
+          <label htmlFor="ziPolicy" className={FIELD_LABEL}>
             자시 정책
           </label>
           <select
             id="ziPolicy"
-            className="rounded-lg border border-gray-300 px-3 py-2 focus:border-gray-900 focus:outline-none"
+            className={FIELD_CLASS}
             {...register('ziPolicy')}
           >
             <option value="sameDay">23~24시는 당일 (기본)</option>
@@ -199,15 +197,12 @@ export function BirthInputForm({
           </select>
         </div>
         <div className="flex flex-col gap-1">
-          <label
-            htmlFor="longitude"
-            className="text-sm font-medium text-gray-700"
-          >
+          <label htmlFor="longitude" className={FIELD_LABEL}>
             출생 지역
           </label>
           <select
             id="longitude"
-            className="rounded-lg border border-gray-300 px-3 py-2 focus:border-gray-900 focus:outline-none"
+            className={FIELD_CLASS}
             {...register('longitude', {
               setValueAs: (v) => (v === '' ? '' : Number(v)),
             })}
@@ -224,7 +219,7 @@ export function BirthInputForm({
 
       <button
         type="submit"
-        className="rounded-lg bg-gray-900 px-4 py-2.5 font-medium text-white hover:bg-gray-700"
+        className="rounded-lg bg-ink px-4 py-2.5 font-medium text-hanji transition-colors hover:bg-ink/85 focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-hanji-raised"
       >
         사주 보기
       </button>
