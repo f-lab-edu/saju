@@ -6,6 +6,8 @@ import { SajuResult } from '#/features/saju/SajuResult'
 
 // 공유 가능한 화면 상태(생년월일시 + 옵션)는 URL search params에 담는다.
 interface SajuSearch {
+  name?: string
+  place?: string
   year?: number
   month?: number
   day?: number
@@ -22,6 +24,13 @@ function toNumber(value: unknown): number | undefined {
   return Number.isFinite(n) ? n : undefined
 }
 
+// URL로 들어오는 자유 문자열은 길이를 잘라 두고, 빈 값은 undefined로 접는다.
+function toText(value: unknown, maxLength: number): string | undefined {
+  if (typeof value !== 'string') return undefined
+  const trimmed = value.trim().slice(0, maxLength)
+  return trimmed === '' ? undefined : trimmed
+}
+
 function validateSearch(search: Record<string, unknown>): SajuSearch {
   const gender =
     search.gender === 'male' || search.gender === 'female'
@@ -30,6 +39,8 @@ function validateSearch(search: Record<string, unknown>): SajuSearch {
   const zi =
     search.zi === 'sameDay' || search.zi === 'nextDay' ? search.zi : undefined
   return {
+    name: toText(search.name, 12),
+    place: toText(search.place, 60),
     year: toNumber(search.year),
     month: toNumber(search.month),
     day: toNumber(search.day),
@@ -85,6 +96,8 @@ function Home() {
   function handleSubmit(values: BirthFormValues) {
     navigate({
       search: {
+        name: values.name.trim() === '' ? undefined : values.name.trim(),
+        place: values.place === '' ? undefined : values.place,
         year: values.year,
         month: values.month,
         day: values.day,
@@ -114,6 +127,8 @@ function Home() {
 
       <BirthInputForm
         defaultValues={{
+          name: search.name,
+          place: search.place,
           year: search.year,
           month: search.month,
           day: search.day,
@@ -128,7 +143,23 @@ function Home() {
       />
 
       {request && (
-        <SajuResult input={request.input} options={request.options} />
+        <section className="flex flex-col gap-3">
+          {(search.name || search.place) && (
+            <div className="flex items-baseline gap-2">
+              {search.name && (
+                <h2 className="font-myeongjo text-xl font-bold">
+                  {search.name}
+                </h2>
+              )}
+              {search.place && (
+                <span className="text-xs text-ink-faint">
+                  {search.place} 출생
+                </span>
+              )}
+            </div>
+          )}
+          <SajuResult input={request.input} options={request.options} />
+        </section>
       )}
     </main>
   )
